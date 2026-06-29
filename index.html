@@ -57,6 +57,38 @@
   .reveal-scale.in-view { opacity: 1; transform: scale(1); }
   .stagger > * { transition-delay: calc(var(--i, 0) * 70ms); }
 
+  /* ---------- beat-in: marker-pop reveal for "how it works" ---------- */
+  .beat-in {
+    opacity: 0;
+    transform: translateY(16px) scale(.85);
+    transition: opacity .45s cubic-bezier(.34,1.56,.64,1),
+                transform .45s cubic-bezier(.34,1.56,.64,1);
+    will-change: opacity, transform;
+  }
+  .beat-in.in-view {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  .beat-in.in-view::after { animation: beat-flash .5s ease-out; }
+  .beat-flash-ring {
+    position: relative;
+  }
+  .beat-flash-ring.in-view {
+    animation: beat-ring-pulse .55s ease-out;
+  }
+  @keyframes beat-ring-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(110,231,200,0.55); }
+    60% { box-shadow: 0 0 0 10px rgba(110,231,200,0); }
+    100% { box-shadow: 0 0 0 0 rgba(110,231,200,0); }
+  }
+  .beat-arrow-draw path { stroke-dasharray: 40; stroke-dashoffset: 40; transition: stroke-dashoffset .35s ease-out; }
+  .beat-arrow-draw.in-view path { stroke-dashoffset: 0; }
+
+  @media (prefers-reduced-motion: reduce){
+    .beat-in { transition: opacity .3s ease !important; transform: none !important; }
+    .beat-flash-ring.in-view { animation: none !important; }
+  }
+
   /* ---------- NAV ---------- */
   nav {
     position: sticky; top: 0; z-index: 50;
@@ -242,8 +274,6 @@
   .pipe-node p { font-size: 13.5px; color: var(--text-dim); margin: 0; line-height: 1.5; }
   .pipe-arrow { display:flex; align-items:center; justify-content:center; padding: 0 6px; }
   .pipe-arrow svg { width: 28px; height: 14px; }
-  .pipe-arrow path { stroke-dasharray: 40; stroke-dashoffset: 40; transition: stroke-dashoffset 1s ease; }
-  .pipeline.in-view .pipe-arrow path { stroke-dashoffset: 0; }
   @media (max-width: 760px){
     .pipeline { grid-template-columns: 1fr; gap: 14px; }
     .pipe-arrow svg { transform: rotate(90deg); }
@@ -850,22 +880,22 @@
     </div>
 
     <!-- animated pipeline diagram -->
-    <div class="pipeline reveal" style="margin-bottom: 70px;">
-      <div class="pipe-node">
+    <div class="pipeline" style="margin-bottom: 70px;" id="howPipeline">
+      <div class="pipe-node beat-in beat-flash-ring" data-beat="0">
         <div class="pipe-icon">🎵</div>
         <h4 data-lang-el="pl">Plik audio</h4><h4 data-lang-el="en">Audio file</h4>
         <p data-lang-el="pl">Twój utwór, dowolny format</p>
         <p data-lang-el="en">Your track, any format</p>
       </div>
-      <div class="pipe-arrow"><svg viewBox="0 0 28 14"><path d="M0 7 H24 M18 1 L24 7 L18 13" fill="none" stroke="var(--accent)" stroke-width="2"/></svg></div>
-      <div class="pipe-node">
+      <div class="pipe-arrow beat-arrow-draw" data-beat="1"><svg viewBox="0 0 28 14"><path d="M0 7 H24 M18 1 L24 7 L18 13" fill="none" stroke="var(--accent)" stroke-width="2"/></svg></div>
+      <div class="pipe-node beat-in beat-flash-ring" data-beat="2">
         <div class="pipe-icon">📊</div>
         <h4 data-lang-el="pl">Analiza częstotliwości</h4><h4 data-lang-el="en">Frequency analysis</h4>
         <p data-lang-el="pl">Wykrywanie uderzeń w czasie rzeczywistym</p>
         <p data-lang-el="en">Real-time hit detection</p>
       </div>
-      <div class="pipe-arrow"><svg viewBox="0 0 28 14"><path d="M0 7 H24 M18 1 L24 7 L18 13" fill="none" stroke="var(--accent)" stroke-width="2"/></svg></div>
-      <div class="pipe-node">
+      <div class="pipe-arrow beat-arrow-draw" data-beat="3"><svg viewBox="0 0 28 14"><path d="M0 7 H24 M18 1 L24 7 L18 13" fill="none" stroke="var(--accent)" stroke-width="2"/></svg></div>
+      <div class="pipe-node beat-in beat-flash-ring" data-beat="4">
         <div class="pipe-icon">📍</div>
         <h4 data-lang-el="pl">Markery w FCP</h4><h4 data-lang-el="en">Markers in FCP</h4>
         <p data-lang-el="pl">Postawione automatycznie, klatka po klatce</p>
@@ -873,26 +903,26 @@
       </div>
     </div>
 
-    <div class="steps reveal stagger">
-      <div class="step" style="--i:0">
+    <div class="steps" id="howSteps">
+      <div class="step beat-in beat-flash-ring" data-beat="5">
         <div class="num">01</div>
         <h3 data-lang-el="pl">Wgraj audio</h3><h3 data-lang-el="en">Load audio</h3>
         <p data-lang-el="pl">Przeciągnij plik dźwiękowy do aplikacji albo wybierz go z dysku.</p>
         <p data-lang-el="en">Drop your audio file into the app or choose it from disk.</p>
       </div>
-      <div class="step" style="--i:1">
+      <div class="step beat-in beat-flash-ring" data-beat="6">
         <div class="num">02</div>
         <h3 data-lang-el="pl">Wybierz element</h3><h3 data-lang-el="en">Pick an element</h3>
         <p data-lang-el="pl">Bas, kick, snare, sub albo pełna siatka beatów — Ty decydujesz, co ma trafić na timeline.</p>
         <p data-lang-el="en">Bass, kick, snare, sub, or the full beat grid — you decide what lands on the timeline.</p>
       </div>
-      <div class="step" style="--i:2">
+      <div class="step beat-in beat-flash-ring" data-beat="7">
         <div class="num">03</div>
         <h3 data-lang-el="pl">Analizuj audio</h3><h3 data-lang-el="en">Analyze audio</h3>
         <p data-lang-el="pl">Aplikacja analizuje częstotliwości i wyznacza dokładne momenty uderzeń.</p>
         <p data-lang-el="en">The app analyzes frequencies and pinpoints the exact moment of each hit.</p>
       </div>
-      <div class="step" style="--i:3">
+      <div class="step beat-in beat-flash-ring" data-beat="8">
         <div class="num">04</div>
         <h3 data-lang-el="pl">Oznacz w FCP</h3><h3 data-lang-el="en">Mark in FCP</h3>
         <p data-lang-el="pl">Playhead wraca na start, a BassMarker Pro stawia markery klawiszem M — w idealnym tempie.</p>
@@ -1221,7 +1251,7 @@
   }
 
   // ---- scroll reveal via IntersectionObserver ----
-  const revealEls = document.querySelectorAll('.reveal, .reveal-scale, .pipeline');
+  const revealEls = document.querySelectorAll('.reveal, .reveal-scale');
 
   function revealIfVisible(){
     const vh = window.innerHeight || document.documentElement.clientHeight;
@@ -1250,6 +1280,61 @@
   revealIfVisible();
   window.addEventListener('load', revealIfVisible);
   setTimeout(()=> revealEls.forEach(el=> el.classList.add('in-view')), 4000);
+
+  // ---- "How it works" beat-paced sequential reveal ----
+  // Elements pop in one by one, like markers landing on the beat,
+  // instead of fading in all at once.
+  (function(){
+    const howSection = document.getElementById('how');
+    if (!howSection) return;
+    const beatEls = Array.from(howSection.querySelectorAll('[data-beat]'))
+      .sort((a, b) => (parseInt(a.dataset.beat, 10) || 0) - (parseInt(b.dataset.beat, 10) || 0));
+    if (!beatEls.length) return;
+
+    const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const STEP_MS = 130; // brisk, on-beat pacing between each element
+    let played = false;
+
+    function playSequence(){
+      if (played) return;
+      played = true;
+      if (prefersReduced) {
+        beatEls.forEach(el => el.classList.add('in-view'));
+        return;
+      }
+      beatEls.forEach((el, i) => {
+        setTimeout(() => el.classList.add('in-view'), i * STEP_MS);
+      });
+    }
+
+    try {
+      const howIO = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            playSequence();
+            howIO.disconnect();
+          }
+        });
+      }, { threshold: 0.2, rootMargin: '0px 0px -10% 0px' });
+      howIO.observe(howSection);
+    } catch (err) {
+      playSequence();
+    }
+
+    // Fallbacks identical in spirit to the general reveal system: if the
+    // section is already substantially in view on load, or IO never fires,
+    // play anyway. Uses the same ~20% visibility bar as the IO threshold so
+    // it doesn't fire the instant the section's edge touches the viewport.
+    function isSubstantiallyVisible(){
+      const r = howSection.getBoundingClientRect();
+      const visible = Math.min(r.bottom, vh) - Math.max(r.top, 0);
+      return visible > r.height * 0.2;
+    }
+    const vh = window.innerHeight || document.documentElement.clientHeight;
+    if (isSubstantiallyVisible()) playSequence();
+    window.addEventListener('load', () => { if (isSubstantiallyVisible()) playSequence(); });
+    setTimeout(playSequence, 5000);
+  })();
 
   // ---- hero parallax on scroll (depth layers: glow, card, mascot) ----
   (function(){
