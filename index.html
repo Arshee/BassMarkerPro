@@ -465,7 +465,7 @@
 
   /* ---- nav v2 ---- */
   .nav2 {
-    position: sticky; top: 0; z-index: 50;
+    position: sticky; top: 0; z-index: 100;
     background: rgba(4,5,13,0.7);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
@@ -584,6 +584,7 @@
 
   /* ---- right panel: app mockup ---- */
   .hero2-visual { position: relative; padding-bottom: 50px; }
+  .hero2-card-parallax { position: relative; will-change: transform; }
   .hero2-card {
     position: relative; z-index: 1;
     background: linear-gradient(160deg, var(--hero2-panel-2), var(--hero2-panel));
@@ -657,15 +658,18 @@
     box-shadow: 0 10px 26px -8px rgba(108,76,240,0.55);
   }
 
-  .hero2-mascot {
+  .hero2-mascot-parallax {
     position: absolute; right: 2%; bottom: -38px; z-index: 2;
-    width: 230px; height: auto; display: block;
+    width: 230px; will-change: transform;
+  }
+  .hero2-mascot {
+    width: 100%; height: auto; display: block;
     filter: drop-shadow(0 30px 40px rgba(0,0,0,0.55));
     animation: mascot-bob 4s ease-in-out infinite;
   }
   @keyframes mascot-bob { 0%,100%{ transform: translateY(0); } 50%{ transform: translateY(-10px); } }
-  @media (max-width: 1020px){ .hero2-mascot { right: 6%; width: 170px; bottom: -28px; } }
-  @media (max-width: 560px){ .hero2-mascot { display: none; } }
+  @media (max-width: 1020px){ .hero2-mascot-parallax { right: 6%; width: 170px; bottom: -28px; } }
+  @media (max-width: 560px){ .hero2-mascot-parallax { display: none; } }
 
   /* ---- bottom requirements bar ---- */
   .hero2-reqbar {
@@ -683,6 +687,7 @@
 
   @media (prefers-reduced-motion: reduce){
     .hero2-mascot, .hero2-bg-glow { animation: none !important; }
+    [data-parallax] { transform: none !important; }
   }
 </style>
 <noscript><style>
@@ -713,7 +718,7 @@
 </nav>
 
 <header class="hero2">
-  <div class="hero2-bg-glow"></div>
+  <div class="hero2-bg-glow" data-parallax="-6"></div>
 
   <div class="hero2-grid">
 
@@ -777,6 +782,7 @@
 
     <!-- RIGHT: app mockup card + mascot -->
     <div class="hero2-visual reveal-scale in-view">
+      <div class="hero2-card-parallax" data-parallax="6">
       <div class="hero2-card">
         <div class="hero2-card-bar">
           <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
@@ -815,8 +821,11 @@
 
         </div>
       </div>
+      </div>
 
-      <img class="hero2-mascot" src="robot.png" alt="BassMarker Pro robot mascot giving a thumbs up">
+      <div class="hero2-mascot-parallax" data-parallax="14">
+        <img class="hero2-mascot" src="robot.png" alt="BassMarker Pro robot mascot giving a thumbs up">
+      </div>
     </div>
 
   </div>
@@ -1241,6 +1250,41 @@
   revealIfVisible();
   window.addEventListener('load', revealIfVisible);
   setTimeout(()=> revealEls.forEach(el=> el.classList.add('in-view')), 4000);
+
+  // ---- hero parallax on scroll (depth layers: glow, card, mascot) ----
+  (function(){
+    const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const heroEl = document.querySelector('.hero2');
+    const layers = document.querySelectorAll('[data-parallax]');
+    if (prefersReduced || !heroEl || !layers.length) return;
+
+    let ticking = false;
+
+    function applyParallax(){
+      const heroHeight = heroEl.offsetHeight;
+      const scrollY = window.scrollY || window.pageYOffset;
+      // Only animate while the hero is plausibly in view; clamp beyond that
+      // so layers don't keep drifting once the user has scrolled far past it.
+      const progress = Math.max(0, Math.min(scrollY, heroHeight));
+      layers.forEach(layer=>{
+        const speed = parseFloat(layer.dataset.parallax) || 0;
+        const offset = (progress / 100) * speed;
+        layer.style.transform = 'translateY(' + offset.toFixed(2) + 'px)';
+      });
+      ticking = false;
+    }
+
+    function onScroll(){
+      if (!ticking){
+        window.requestAnimationFrame(applyParallax);
+        ticking = true;
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    applyParallax();
+  })();
 </script>
 
 </body>
