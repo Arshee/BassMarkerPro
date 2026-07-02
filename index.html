@@ -89,7 +89,83 @@
     .beat-flash-ring.in-view { animation: none !important; }
   }
 
-  /* ---------- NAV ---------- */
+  /* =====================================================
+     ANIMATION PACK: tick · mode-stagger · accordion · tilt
+     ===================================================== */
+
+  /* 1. CHECK TICK — each ✓ icon animates in separately */
+  .check-anim {
+    opacity: 0;
+    transform: scale(0) rotate(-45deg);
+    transition: opacity .35s cubic-bezier(.34,1.56,.64,1),
+                transform .35s cubic-bezier(.34,1.56,.64,1);
+    will-change: transform, opacity;
+  }
+  .check-anim.ticked {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+  /* flash the parent li's check circle green on tick */
+  @keyframes check-glow {
+    0%   { box-shadow: 0 0 0 0 rgba(110,231,200,.7); }
+    60%  { box-shadow: 0 0 0 12px rgba(110,231,200,0); }
+    100% { box-shadow: 0 0 0 0 rgba(110,231,200,0); }
+  }
+  .check-anim.ticked { animation: check-glow .5s ease-out; }
+
+  /* 2. MODE CARDS — beat-in with sequential delay driven by JS data-delay */
+  .mode-card-anim {
+    opacity: 0;
+    transform: translateY(20px) scale(.88);
+    transition: opacity .4s cubic-bezier(.34,1.45,.64,1),
+                transform .4s cubic-bezier(.34,1.45,.64,1);
+    will-change: opacity, transform;
+  }
+  .mode-card-anim.in-view { opacity: 1; transform: translateY(0) scale(1); }
+
+  /* 3. FAQ ACCORDION */
+  .faq-item { cursor: pointer; }
+  .faq-item h4 {
+    display: flex; justify-content: space-between; align-items: center;
+    user-select: none;
+  }
+  .faq-arrow {
+    flex: none; width: 20px; height: 20px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    background: rgba(255,255,255,.06); border: 1px solid var(--panel-line);
+    font-size: 12px; color: var(--text-dim);
+    transition: transform .3s var(--ease), background .2s ease, color .2s ease;
+  }
+  .faq-item.open .faq-arrow {
+    transform: rotate(180deg);
+    background: rgba(110,231,200,.12); color: var(--accent);
+    border-color: rgba(110,231,200,.3);
+  }
+  .faq-body {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height .4s cubic-bezier(.16,.8,.24,1);
+  }
+  .faq-item.open .faq-body { max-height: 400px; }
+  .faq-item p { margin: 0 0 20px; }
+
+  /* 4. FEATURE VISUAL TILT (3-D mouse parallax) */
+  .feature-visual {
+    transform-style: preserve-3d;
+    perspective: 800px;
+    transition: transform .1s ease;
+  }
+  .feature-visual.tilting { transition: none; }
+  .feature-visual.tilt-reset { transition: transform .5s cubic-bezier(.16,.8,.24,1); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .check-anim { transition: none !important; opacity: 1 !important; transform: none !important; }
+    .mode-card-anim { transition: none !important; opacity: 1 !important; transform: none !important; }
+    .faq-body { transition: none !important; }
+    .faq-arrow { transition: none !important; }
+    .feature-visual, .feature-visual.tilting, .feature-visual.tilt-reset { transform: none !important; transition: none !important; }
+  }
   nav {
     position: sticky; top: 0; z-index: 50;
     background: rgba(5,5,7,0.72);
@@ -1134,35 +1210,35 @@
     </div>
 
     <div class="modes reveal stagger">
-      <div class="mode-card" style="--i:0">
+      <div class="mode-card mode-card-anim" style="--i:0">
         <span class="icon">💥</span>
         <h4 data-lang-el="pl">Bass Hits</h4><h4 data-lang-el="en">Bass Hits</h4>
         <p data-lang-el="pl">Ciężkie uderzenia basu — do kinowych i phonkowych montaży.</p>
         <p data-lang-el="en">Heavy bass impacts — for cinematic and phonk edits.</p>
         <div class="bars"><span style="height:6px;animation-delay:0s"></span><span style="height:14px;animation-delay:.1s"></span><span style="height:9px;animation-delay:.2s"></span><span style="height:17px;animation-delay:.3s"></span><span style="height:11px;animation-delay:.4s"></span></div>
       </div>
-      <div class="mode-card" style="--i:1">
+      <div class="mode-card mode-card-anim" style="--i:1">
         <span class="icon">🥁</span>
         <h4 data-lang-el="pl">Kick drum</h4><h4 data-lang-el="en">Kick drum</h4>
         <p data-lang-el="pl">60–150 Hz. Izoluje stopę z reszty miksu.</p>
         <p data-lang-el="en">60–150 Hz. Isolates the kick from the rest of the mix.</p>
         <div class="bars"><span style="height:16px;animation-delay:.1s"></span><span style="height:8px;animation-delay:.2s"></span><span style="height:13px;animation-delay:.3s"></span><span style="height:6px;animation-delay:.4s"></span><span style="height:15px;animation-delay:.5s"></span></div>
       </div>
-      <div class="mode-card" style="--i:2">
+      <div class="mode-card mode-card-anim" style="--i:2">
         <span class="icon">👏</span>
         <h4 data-lang-el="pl">Snare / Clap</h4><h4 data-lang-el="en">Snare / Clap</h4>
         <p data-lang-el="pl">200–500 Hz. Łapie werbel — dokładnie na 2 i 4.</p>
         <p data-lang-el="en">200–500 Hz. Locks onto the snare — right on the 2 and 4.</p>
         <div class="bars"><span style="height:9px;animation-delay:.15s"></span><span style="height:17px;animation-delay:.25s"></span><span style="height:7px;animation-delay:.35s"></span><span style="height:12px;animation-delay:.45s"></span><span style="height:16px;animation-delay:.55s"></span></div>
       </div>
-      <div class="mode-card" style="--i:3">
+      <div class="mode-card mode-card-anim" style="--i:3">
         <span class="icon">🔉</span>
         <h4 data-lang-el="pl">808 / Sub</h4><h4 data-lang-el="en">808 / Sub</h4>
         <p data-lang-el="pl">20–60 Hz. Wychwytuje dropy i zjazdy basu.</p>
         <p data-lang-el="en">20–60 Hz. Catches drops and bass slides.</p>
         <div class="bars"><span style="height:18px;animation-delay:.05s"></span><span style="height:10px;animation-delay:.15s"></span><span style="height:14px;animation-delay:.25s"></span><span style="height:8px;animation-delay:.35s"></span><span style="height:12px;animation-delay:.45s"></span></div>
       </div>
-      <div class="mode-card" style="--i:4">
+      <div class="mode-card mode-card-anim" style="--i:4">
         <span class="icon">🎵</span>
         <h4 data-lang-el="pl">Beat Grid</h4><h4 data-lang-el="en">Beat Grid</h4>
         <p data-lang-el="pl">Pełna siatka BPM — każdy beat zablokowany do tempa.</p>
@@ -1277,34 +1353,39 @@
     </div>
 
     <div class="faq-item reveal">
-      <h4 data-lang-el="pl">Czy to działa z dowolnym utworem?</h4>
-      <h4 data-lang-el="en">Does this work with any track?</h4>
-      <p data-lang-el="pl">Tak — wgraj plik audio w dowolnym popularnym formacie. Analiza częstotliwości działa niezależnie od stylu muzycznego, choć tryby detekcji są dopasowane głównie do treści z wyraźnym rytmem (muzyka elektroniczna, hip-hop, pop, trailer music).</p>
-      <p data-lang-el="en">Yes — load an audio file in any common format. Frequency analysis works regardless of music style, though detection modes are tuned mainly for content with a clear rhythm (electronic music, hip-hop, pop, trailer music).</p>
+      <h4><span data-lang-el="pl">Czy to działa z dowolnym utworem?</span><span data-lang-el="en">Does this work with any track?</span><span class="faq-arrow">›</span></h4>
+      <div class="faq-body">
+        <p data-lang-el="pl">Tak — wgraj plik audio w dowolnym popularnym formacie. Analiza częstotliwości działa niezależnie od stylu muzycznego, choć tryby detekcji są dopasowane głównie do treści z wyraźnym rytmem (muzyka elektroniczna, hip-hop, pop, trailer music).</p>
+        <p data-lang-el="en">Yes — load an audio file in any common format. Frequency analysis works regardless of music style, though detection modes are tuned mainly for content with a clear rhythm (electronic music, hip-hop, pop, trailer music).</p>
+      </div>
     </div>
     <div class="faq-item reveal">
-      <h4 data-lang-el="pl">Czy muszę coś instalować w terminalu?</h4>
-      <h4 data-lang-el="en">Do I need to install anything via Terminal?</h4>
-      <p data-lang-el="pl">Nie. Przy pierwszym uruchomieniu aplikacja sama instaluje potrzebne komponenty (ffmpeg, librosa) — wystarczy połączenie z internetem.</p>
-      <p data-lang-el="en">No. On first launch, the app installs the components it needs (ffmpeg, librosa) on its own — an internet connection is all it takes.</p>
+      <h4><span data-lang-el="pl">Czy muszę coś instalować w terminalu?</span><span data-lang-el="en">Do I need to install anything via Terminal?</span><span class="faq-arrow">›</span></h4>
+      <div class="faq-body">
+        <p data-lang-el="pl">Nie. Przy pierwszym uruchomieniu aplikacja sama instaluje potrzebne komponenty (ffmpeg, librosa) — wystarczy połączenie z internetem.</p>
+        <p data-lang-el="en">No. On first launch, the app installs the components it needs (ffmpeg, librosa) on its own — an internet connection is all it takes.</p>
+      </div>
     </div>
     <div class="faq-item reveal">
-      <h4 data-lang-el="pl">Co jeśli markery są przesunięte względem bitu?</h4>
-      <h4 data-lang-el="en">What if the markers are off from the beat?</h4>
-      <p data-lang-el="pl">Użyj suwaka Advance, żeby przesunąć wszystkie markery o kilka klatek wcześniej — bez ponownej analizy audio.</p>
-      <p data-lang-el="en">Use the Advance slider to shift every marker a few frames earlier — no audio re-analysis required.</p>
+      <h4><span data-lang-el="pl">Co jeśli markery są przesunięte względem bitu?</span><span data-lang-el="en">What if the markers are off from the beat?</span><span class="faq-arrow">›</span></h4>
+      <div class="faq-body">
+        <p data-lang-el="pl">Użyj suwaka Advance, żeby przesunąć wszystkie markery o kilka klatek wcześniej — bez ponownej analizy audio.</p>
+        <p data-lang-el="en">Use the Advance slider to shift every marker a few frames earlier — no audio re-analysis required.</p>
+      </div>
     </div>
     <div class="faq-item reveal">
-      <h4 data-lang-el="pl">Dlaczego potrzebne jest uprawnienie Dostępności?</h4>
-      <h4 data-lang-el="en">Why is the Accessibility permission needed?</h4>
-      <p data-lang-el="pl">BassMarker Pro steruje Final Cut Pro przez naciśnięcia klawisza M w trakcie odtwarzania — to wymaga uprawnienia do automatyzacji klawiatury w macOS. Konfiguracja zajmuje 10 sekund i jest wymagana tylko raz.</p>
-      <p data-lang-el="en">BassMarker Pro controls Final Cut Pro by pressing M during playback — that requires macOS keyboard automation permission. Setup takes 10 seconds and is required only once.</p>
+      <h4><span data-lang-el="pl">Dlaczego potrzebne jest uprawnienie Dostępności?</span><span data-lang-el="en">Why is the Accessibility permission needed?</span><span class="faq-arrow">›</span></h4>
+      <div class="faq-body">
+        <p data-lang-el="pl">BassMarker Pro steruje Final Cut Pro przez naciśnięcia klawisza M w trakcie odtwarzania — to wymaga uprawnienia do automatyzacji klawiatury w macOS. Konfiguracja zajmuje 10 sekund i jest wymagana tylko raz.</p>
+        <p data-lang-el="en">BassMarker Pro controls Final Cut Pro by pressing M during playback — that requires macOS keyboard automation permission. Setup takes 10 seconds and is required only once.</p>
+      </div>
     </div>
     <div class="faq-item reveal">
-      <h4 data-lang-el="pl">Co jeśli coś nie działa na moim komputerze?</h4>
-      <h4 data-lang-el="en">What if something doesn't work on my Mac?</h4>
-      <p data-lang-el="pl">W aplikacji znajdziesz przycisk „Report a problem” — wysyła diagnostyczny zrzut, dzięki czemu można sprawdzić, co konkretnie poszło nie tak, bez zgadywania.</p>
-      <p data-lang-el="en">The app has a "Report a problem" button — it sends a diagnostic snapshot so the actual issue on your machine can be checked, not guessed at.</p>
+      <h4><span data-lang-el="pl">Co jeśli coś nie działa na moim komputerze?</span><span data-lang-el="en">What if something doesn't work on my Mac?</span><span class="faq-arrow">›</span></h4>
+      <div class="faq-body">
+        <p data-lang-el="pl">W aplikacji znajdziesz przycisk „Report a problem" — wysyła diagnostyczny zrzut, dzięki czemu można sprawdzić, co konkretnie poszło nie tak, bez zgadywania.</p>
+        <p data-lang-el="en">The app has a "Report a problem" button — it sends a diagnostic snapshot so the actual issue on your machine can be checked, not guessed at.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -1499,6 +1580,121 @@
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
     applyParallax();
+  })();
+
+  // =====================================================
+  // ANIMATION PACK JS
+  // =====================================================
+
+  // 1. CHECK TICK — sequential reveal of ✓ icons in req-list
+  (function(){
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const lists = document.querySelectorAll('.req-list');
+    if (!lists.length) return;
+
+    function tickList(list) {
+      const checks = list.querySelectorAll('.check');
+      checks.forEach((el, i) => {
+        el.classList.add('check-anim');
+        if (prefersReduced) { el.classList.add('ticked'); return; }
+        setTimeout(() => el.classList.add('ticked'), i * 120);
+      });
+    }
+
+    try {
+      const tickIO = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            tickList(e.target);
+            tickIO.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.3 });
+      lists.forEach(l => tickIO.observe(l));
+    } catch(err) {
+      lists.forEach(tickList);
+    }
+  })();
+
+  // 2. MODE CARDS — beat-paced sequential stagger
+  (function(){
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const cards = document.querySelectorAll('.mode-card-anim');
+    if (!cards.length) return;
+    let played = false;
+
+    function playCards() {
+      if (played) return;
+      played = true;
+      cards.forEach((card, i) => {
+        if (prefersReduced) { card.classList.add('in-view'); return; }
+        setTimeout(() => card.classList.add('in-view'), i * 110);
+      });
+    }
+
+    try {
+      const modesSection = document.getElementById('modes');
+      const modesIO = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) { playCards(); modesIO.disconnect(); } });
+      }, { threshold: 0.2 });
+      if (modesSection) modesIO.observe(modesSection);
+      else cards.forEach(c => c.classList.add('in-view'));
+    } catch(err) { playCards(); }
+
+    // Visibility fallback
+    const vh = window.innerHeight || document.documentElement.clientHeight;
+    const modesEl = document.getElementById('modes');
+    if (modesEl) {
+      const r = modesEl.getBoundingClientRect();
+      const vis = Math.min(r.bottom, vh) - Math.max(r.top, 0);
+      if (vis > r.height * 0.2) playCards();
+    }
+    setTimeout(playCards, 5000);
+  })();
+
+  // 3. FAQ ACCORDION
+  (function(){
+    const items = document.querySelectorAll('.faq-item');
+    items.forEach(item => {
+      const h4 = item.querySelector('h4');
+      if (!h4) return;
+      h4.addEventListener('click', () => {
+        const isOpen = item.classList.contains('open');
+        // close all others
+        items.forEach(other => other !== item && other.classList.remove('open'));
+        // toggle this one
+        item.classList.toggle('open', !isOpen);
+      });
+    });
+    // open first item by default for discoverability
+    if (items.length) items[0].classList.add('open');
+  })();
+
+  // 4. FEATURE VISUAL TILT on mousemove (desktop only)
+  (function(){
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduced || ('ontouchstart' in window)) return;
+
+    const MAX_DEG = 5;
+    document.querySelectorAll('.feature-visual').forEach(el => {
+      el.addEventListener('mouseenter', () => el.classList.add('tilting'));
+      el.addEventListener('mouseleave', () => {
+        el.classList.remove('tilting');
+        el.classList.add('tilt-reset');
+        el.style.transform = '';
+        setTimeout(() => el.classList.remove('tilt-reset'), 500);
+      });
+      el.addEventListener('mousemove', e => {
+        const r = el.getBoundingClientRect();
+        const cx = r.left + r.width / 2;
+        const cy = r.top + r.height / 2;
+        const dx = (e.clientX - cx) / (r.width / 2);   // -1 → 1
+        const dy = (e.clientY - cy) / (r.height / 2);  // -1 → 1
+        const rotY =  dx * MAX_DEG;
+        const rotX = -dy * MAX_DEG;
+        el.style.transform = `perspective(800px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg)`;
+      });
+    });
   })();
 </script>
 
