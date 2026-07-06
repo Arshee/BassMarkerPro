@@ -924,6 +924,60 @@
     .hero2-grid { padding-left: 14px; padding-right: 14px; }
     .wrap { padding: 0 14px; }
   }
+
+  /* =====================================================
+     MOBILE TAP-TARGET & READABILITY FIXES
+     iOS/Android HIG minimum: 44×44px touch target
+     ===================================================== */
+  @media (max-width: 760px) {
+
+    /* 1. FAQ h4 — tap area too small (was ~20px height) */
+    .faq-item h4 {
+      min-height: 48px;
+      padding: 14px 0;
+      align-items: center;
+    }
+    .faq-item { padding: 4px 0; }
+
+    /* 2. Lang-switch PL/EN buttons — was 34×24px */
+    .lang-switch button {
+      padding: 9px 14px;
+      min-height: 36px;
+    }
+
+    /* 3. Nav CTA — was 97×32px on some breakpoints */
+    .nav2-cta {
+      min-height: 38px;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    /* 4. Footer links — was 14px height */
+    .footer-links a {
+      padding: 10px 6px;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    /* 5. Waveform timestamps — 11.5px is below mobile minimum */
+    .hero2-wave-panel .wp-head {
+      font-size: 12px;
+    }
+
+    /* 6. FAQ arrow touch area padding boost */
+    .faq-arrow {
+      width: 28px;
+      height: 28px;
+      flex: none;
+    }
+
+    /* 7. Mode card mini-bars — ensure they don't cause overflow */
+    .mode-card .bars { overflow: hidden; }
+
+    /* 8. Req-list check icons — slightly larger tap context */
+    .req-list li { padding: 4px 0; }
+  }
 </style>
 <noscript><style>
   .reveal, .reveal-scale, .hero-shot-frame { opacity: 1 !important; transform: none !important; }
