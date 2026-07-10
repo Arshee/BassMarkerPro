@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#050507"/><stop offset=".55" stop-color="#101522"/><stop offset="1" stop-color="#03050c"/></linearGradient>
+    <linearGradient id="neon" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#6ee7c8"/><stop offset=".45" stop-color="#19c3ee"/><stop offset="1" stop-color="#6c4cf0"/></linearGradient>
+    <filter id="blur"><feGaussianBlur stdDeviation="20"/></filter>
+  </defs>
+  <rect width="1200" height="760" fill="url(#bg)"/>
+  <ellipse cx="650" cy="655" rx="520" ry="105" fill="#19c3ee" opacity=".14" filter="url(#blur)"/>
+  <g transform="translate(150 120)">
+    <rect x="120" y="72" width="560" height="340" rx="28" fill="#0b0f1c" stroke="#fff" stroke-opacity=".14"/>
+    <rect x="154" y="110" width="492" height="238" rx="18" fill="#111827"/>
+    <path d="M190 288 C270 214 350 335 430 248 C522 150 574 326 626 218" fill="none" stroke="url(#neon)" stroke-width="8" opacity=".9"/>
+    <g fill="#6ee7c8"><circle cx="246" cy="252" r="10"/><circle cx="390" cy="279" r="10"/><circle cx="535" cy="238" r="10"/><circle cx="608" cy="222" r="10"/></g>
+    <rect x="290" y="426" width="220" height="28" rx="10" fill="#111827"/>
+    <rect x="216" y="454" width="368" height="36" rx="12" fill="#070914"/>
+  </g>
+  <g transform="translate(750 255)">
+    <circle cx="120" cy="120" r="92" fill="#0d1223" stroke="#fff" stroke-opacity=".14"/>
+    <circle cx="120" cy="120" r="52" fill="#050507" stroke="url(#neon)" stroke-width="8"/>
+    <path d="M36 190 C88 238 152 238 204 190" fill="none" stroke="#19c3ee" stroke-width="18" stroke-linecap="round" opacity=".7"/>
+  </g>
+  <g transform="translate(110 430)">
+    <rect width="210" height="70" rx="34" fill="#0d1223" stroke="#fff" stroke-opacity=".12"/>
+    <circle cx="48" cy="35" r="18" fill="url(#neon)"/>
+    <rect x="86" y="24" width="90" height="8" rx="4" fill="#9aa0b4"/>
+    <rect x="86" y="42" width="62" height="8" rx="4" fill="#6e7284"/>
+  </g>
+  <g transform="translate(475 545)">
+    <rect width="430" height="80" rx="22" fill="#0d1223" stroke="#fff" stroke-opacity=".12"/>
+    <g fill="url(#neon)">
+      <rect x="34" y="38" width="24" height="26" rx="6"/><rect x="74" y="20" width="24" height="44" rx="6"/><rect x="114" y="30" width="24" height="34" rx="6"/><rect x="154" y="12" width="24" height="52" rx="6"/><rect x="194" y="34" width="24" height="30" rx="6"/><rect x="234" y="22" width="24" height="42" rx="6"/><rect x="274" y="10" width="24" height="54" rx="6"/><rect x="314" y="28" width="24" height="36" rx="6"/><rect x="354" y="18" width="24" height="46" rx="6"/>
+    </g>
+  </g>
+  <text x="600" y="84" text-anchor="middle" fill="#fff" font-family="Arial, Helvetica, sans-serif" font-size="42" font-weight="800">Creator desk · beat synced</text>
+  <text x="600" y="124" text-anchor="middle" fill="#9aa0b4" font-family="Arial, Helvetica, sans-serif" font-size="22">shorts, reels, trailers, automotive edits</text>
+</svg>

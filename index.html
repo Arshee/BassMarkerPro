@@ -827,6 +827,942 @@
     [data-parallax] { transform: none !important; }
   }
 
+
+  /* =====================================================
+     FULL 3D HERO CANVAS - offline, responsive, reduced-motion safe
+     ===================================================== */
+  .hero2 { min-height: 760px; isolation: isolate; }
+  .hero3d-scene {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+    opacity: .92;
+  }
+  .hero3d-scene::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 72% 30%, rgba(25,195,238,.16), transparent 34%),
+      linear-gradient(90deg, rgba(4,5,13,.78) 0%, rgba(4,5,13,.42) 46%, rgba(4,5,13,.78) 100%);
+    z-index: 1;
+  }
+  #hero3dCanvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    filter: saturate(1.1) contrast(1.05);
+  }
+  .hero2-left,
+  .hero2-visual,
+  .hero2-reqbar { position: relative; z-index: 2; }
+  .hero2-card {
+    transform-style: preserve-3d;
+    animation: hero-card-float 6s ease-in-out infinite;
+  }
+  @keyframes hero-card-float {
+    0%, 100% { transform: translate3d(0,0,0) rotateX(0deg) rotateY(0deg); }
+    50% { transform: translate3d(0,-10px,0) rotateX(1.8deg) rotateY(-2.6deg); }
+  }
+  .hero2-track-row,
+  .hero2-wave-panel,
+  .hero2-actionbtn { transform: translateZ(18px); }
+  .hero2-stat .stat-icon {
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.12), 0 14px 30px -18px rgba(25,195,238,.8);
+  }
+
+  .hero2.is-pointer-active .hero2-card {
+    animation: none;
+    transition: transform .12s ease-out, box-shadow .12s ease-out;
+    box-shadow:
+      0 70px 150px -42px rgba(25,195,238,.48),
+      0 20px 70px -28px rgba(108,76,240,.5),
+      0 0 0 1px rgba(255,255,255,0.05) inset;
+  }
+  .hero2.is-pointer-active .hero2-mascot {
+    animation: none;
+    transition: transform .12s ease-out, filter .12s ease-out;
+    filter: drop-shadow(0 34px 48px rgba(0,0,0,0.62)) drop-shadow(0 0 22px rgba(25,195,238,.22));
+  }
+  .hero2.is-pointer-active #hero3dCanvas {
+    filter: saturate(1.35) contrast(1.12) brightness(1.06);
+  }
+  .hero2-card,
+  .hero2-mascot,
+  #hero3dCanvas {
+    transition: transform .35s var(--ease), filter .35s var(--ease), box-shadow .35s var(--ease);
+  }
+
+  @media (max-width: 1020px) {
+    .hero2 { min-height: auto; }
+    .hero3d-scene { opacity: .55; }
+    .hero3d-scene::before {
+      background:
+        radial-gradient(circle at 70% 18%, rgba(25,195,238,.18), transparent 30%),
+        linear-gradient(180deg, rgba(4,5,13,.52) 0%, rgba(4,5,13,.86) 78%);
+    }
+  }
+  @media (max-width: 560px) {
+    .hero3d-scene { opacity: .42; }
+    .hero2-card { animation: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero2-card { animation: none !important; }
+  }
+
+
+  /* =====================================================
+     3D WORKFLOW SECTION - extends the 3D language beyond hero
+     ===================================================== */
+  .experience3d {
+    position: relative;
+    overflow: hidden;
+    padding: 120px 0 130px;
+    background:
+      linear-gradient(180deg, rgba(4,5,13,1), rgba(5,5,7,.96) 36%, rgba(4,5,13,1)),
+      radial-gradient(circle at 78% 28%, rgba(25,195,238,.16), transparent 34%);
+    content-visibility: visible;
+  }
+  .experience3d::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(25,195,238,.055) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(25,195,238,.045) 1px, transparent 1px);
+    background-size: 58px 58px;
+    transform: perspective(700px) rotateX(64deg) translateY(120px) scale(1.25);
+    transform-origin: 50% 100%;
+    opacity: .55;
+    pointer-events: none;
+  }
+  .experience3d::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(4,5,13,.96) 0%, transparent 42%, rgba(4,5,13,.78) 100%);
+    pointer-events: none;
+  }
+  .experience3d-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: .86fr 1.14fr;
+    gap: 72px;
+    align-items: center;
+  }
+  .experience3d-copy { max-width: 480px; }
+  .experience3d-copy h2 { margin-bottom: 18px; }
+  .experience3d-copy p {
+    color: var(--hero2-text-dim);
+    font-size: 17px;
+    line-height: 1.7;
+    margin: 0 0 24px;
+  }
+  .experience3d-list {
+    display: grid;
+    gap: 12px;
+    margin-top: 28px;
+  }
+  .experience3d-list .mini-card {
+    display: grid;
+    grid-template-columns: 42px 1fr;
+    gap: 13px;
+    align-items: center;
+    padding: 14px;
+    border-radius: 14px;
+    border: 1px solid var(--hero2-line);
+    background: rgba(255,255,255,.035);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
+  }
+  .mini-card .mini-ic {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, rgba(25,195,238,.18), rgba(108,76,240,.18));
+    color: var(--grad-cyan);
+    border: 1px solid rgba(255,255,255,.08);
+  }
+  .mini-card strong { display: block; color: #fff; font-size: 14.5px; margin-bottom: 2px; }
+  .mini-card span { color: var(--hero2-text-dim); font-size: 13px; line-height: 1.35; }
+  html[data-lang="pl"] .mini-card span[data-lang-el="pl"],
+  html[data-lang="en"] .mini-card span[data-lang-el="en"] { display: block !important; }
+
+  .workflow3d {
+    --scene-tilt: 0deg;
+    --scene-progress: 0;
+    min-height: 520px;
+    position: relative;
+    perspective: 1200px;
+  }
+  .workflow3d-stage {
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+    transform: rotateX(calc(58deg - var(--scene-progress) * 10deg)) rotateZ(calc(-8deg + var(--scene-tilt))) translateY(18px);
+    transition: transform .22s ease-out;
+  }
+  .workflow3d-core {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 168px;
+    height: 168px;
+    transform: translate(-50%, -50%) translateZ(96px);
+    border-radius: 34px;
+    background:
+      radial-gradient(circle at 38% 30%, rgba(255,255,255,.22), transparent 24%),
+      linear-gradient(145deg, rgba(25,195,238,.36), rgba(108,76,240,.28) 55%, rgba(10,14,28,.86));
+    border: 1px solid rgba(255,255,255,.18);
+    box-shadow:
+      0 36px 90px -34px rgba(25,195,238,.82),
+      0 0 70px rgba(108,76,240,.22),
+      inset 0 1px 0 rgba(255,255,255,.22);
+    display: grid;
+    place-items: center;
+    color: #fff;
+    font-weight: 800;
+    font-size: 42px;
+    letter-spacing: 0;
+    animation: core-breathe 4.8s ease-in-out infinite;
+  }
+  .workflow3d-core span {
+    transform: translateZ(30px);
+    text-shadow: 0 0 28px rgba(255,255,255,.25);
+  }
+  @keyframes core-breathe {
+    0%, 100% { filter: saturate(1); }
+    50% { filter: saturate(1.35) brightness(1.08); }
+  }
+  .workflow3d-ring {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: var(--ring-size);
+    height: var(--ring-size);
+    border-radius: 999px;
+    border: 1px solid rgba(25,195,238,.22);
+    transform: translate(-50%, -50%) translateZ(var(--z)) rotateZ(var(--r));
+    box-shadow: 0 0 40px rgba(25,195,238,.08);
+  }
+  .workflow3d-ring::before {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    background: conic-gradient(from 90deg, transparent, rgba(25,195,238,.38), transparent 34%, rgba(245,166,35,.28), transparent 68%);
+    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2px));
+    mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2px));
+    animation: orbit-spin var(--speed) linear infinite;
+  }
+  @keyframes orbit-spin { to { transform: rotate(360deg); } }
+  .workflow3d-card {
+    position: absolute;
+    width: 210px;
+    min-height: 112px;
+    padding: 16px;
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(10,14,28,.72);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 28px 70px -38px rgba(0,0,0,.92), inset 0 1px 0 rgba(255,255,255,.08);
+    transform-style: preserve-3d;
+  }
+  .workflow3d-card h3 {
+    font-size: 14px;
+    margin: 0 0 8px;
+    color: #fff;
+  }
+  .workflow3d-card p {
+    margin: 0;
+    color: var(--hero2-text-dim);
+    font-size: 12.5px;
+    line-height: 1.45;
+  }
+  .workflow3d-card .card-line {
+    height: 34px;
+    display: flex;
+    gap: 3px;
+    align-items: end;
+    margin-top: 12px;
+  }
+  .workflow3d-card .card-line i {
+    display: block;
+    flex: 1;
+    border-radius: 4px 4px 0 0;
+    background: linear-gradient(180deg, var(--grad-cyan), var(--grad-violet));
+    opacity: .72;
+    animation: mini-wave 1.6s ease-in-out infinite;
+  }
+  @keyframes mini-wave {
+    0%,100% { transform: scaleY(.55); }
+    50% { transform: scaleY(1); }
+  }
+  .workflow3d-card.input { left: 2%; top: 8%; transform: translateZ(58px) rotateY(16deg); }
+  .workflow3d-card.detect { right: 0; top: 15%; transform: translateZ(132px) rotateY(-18deg); }
+  .workflow3d-card.timeline { left: 12%; bottom: 4%; transform: translateZ(92px) rotateX(-8deg) rotateY(12deg); }
+  .workflow3d-card.export { right: 8%; bottom: 1%; transform: translateZ(42px) rotateX(-10deg) rotateY(-12deg); }
+  .workflow3d-marker {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    width: 18px;
+    height: 18px;
+    border-radius: 50% 50% 50% 3px;
+    transform: translateZ(var(--z)) rotate(-45deg);
+    background: linear-gradient(135deg, #6ee7c8, #19c3ee);
+    box-shadow: 0 0 26px rgba(25,195,238,.58);
+    animation: marker-float var(--speed) ease-in-out infinite;
+  }
+  .workflow3d-marker::after {
+    content: "";
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(4,5,13,.8);
+    left: 5px;
+    top: 5px;
+  }
+  @keyframes marker-float {
+    0%,100% { translate: 0 0; }
+    50% { translate: 0 -18px; }
+  }
+
+  @media (max-width: 980px) {
+    .experience3d { padding: 86px 0 96px; }
+    .experience3d-grid { grid-template-columns: 1fr; gap: 42px; }
+    .experience3d-copy { max-width: 680px; }
+    .workflow3d { min-height: 500px; }
+  }
+  @media (max-width: 620px) {
+    .experience3d { padding: 72px 0 80px; }
+    .workflow3d {
+      min-height: 620px;
+      perspective: 900px;
+      overflow: hidden;
+      width: 100%;
+    }
+    .workflow3d-stage {
+      inset: 8px 0;
+      transform: rotateX(52deg) rotateZ(-6deg) scale(.74);
+      transform-origin: 50% 50%;
+    }
+    .workflow3d-core { width: 132px; height: 132px; font-size: 34px; border-radius: 28px; }
+    .workflow3d-ring {
+      width: calc(var(--ring-size) * .74);
+      height: calc(var(--ring-size) * .74);
+      opacity: .72;
+    }
+    .workflow3d-card {
+      width: min(218px, 66vw);
+      min-height: 104px;
+      padding: 14px;
+    }
+    .workflow3d-card.input { left: 3%; top: 0; }
+    .workflow3d-card.detect { right: 7%; top: 20%; }
+    .workflow3d-card.timeline { left: 4%; bottom: 18%; }
+    .workflow3d-card.export { right: 7%; bottom: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .workflow3d-stage { transition: none !important; transform: rotateX(54deg) rotateZ(-7deg) !important; }
+    .workflow3d-core,
+    .workflow3d-ring::before,
+    .workflow3d-marker,
+    .workflow3d-card .card-line i { animation: none !important; }
+  }
+
+
+  /* =====================================================
+     FULL-SITE 3D POLISH - feature rows, modes, gallery, pricing
+     ===================================================== */
+  .feature-row,
+  .steps,
+  .modes,
+  .gallery,
+  #requirements .feature-row,
+  #faq .wrap,
+  .final-cta .wrap {
+    perspective: 1100px;
+    transform-style: preserve-3d;
+  }
+  .feature-row {
+    --row-depth: 0;
+    transform: translateZ(0);
+  }
+  .feature-row .feature-text {
+    transform: translateZ(calc(18px + var(--row-depth) * 18px));
+  }
+  .feature-row .feature-visual {
+    position: relative;
+    transform: rotateY(calc(-5deg + var(--row-depth) * 3deg)) rotateX(2deg) translateZ(calc(24px + var(--row-depth) * 32px));
+    box-shadow:
+      0 44px 110px -54px rgba(25,195,238,.38),
+      0 24px 70px -46px rgba(108,76,240,.48),
+      inset 0 1px 0 rgba(255,255,255,.08);
+  }
+  .feature-row.reverse .feature-visual {
+    transform: rotateY(calc(5deg - var(--row-depth) * 3deg)) rotateX(2deg) translateZ(calc(24px + var(--row-depth) * 32px));
+  }
+  .feature-row .feature-visual::before,
+  .pricing-card::before,
+  .mode-card::before,
+  .gallery-item::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(circle at var(--mx, 50%) var(--my, 30%), rgba(255,255,255,.13), transparent 36%);
+    opacity: 0;
+    transition: opacity .25s ease;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .feature-row .feature-visual:hover::before,
+  .pricing-card:hover::before,
+  .mode-card:hover::before,
+  .gallery-item:hover::before { opacity: 1; }
+
+  .steps {
+    transform: rotateX(2deg) translateZ(0);
+    box-shadow: 0 42px 110px -74px rgba(25,195,238,.5);
+  }
+  .step {
+    transform: translateZ(0);
+    transition: transform .35s var(--ease), background .35s ease, border-color .35s ease;
+  }
+  .step:hover {
+    transform: translateY(-8px) translateZ(46px);
+    background: linear-gradient(180deg, rgba(25,195,238,.08), var(--panel));
+  }
+
+  .modes {
+    transform-style: preserve-3d;
+  }
+  .mode-card {
+    position: relative;
+    overflow: hidden;
+    transform: translateZ(0) rotateX(0deg);
+    box-shadow: 0 22px 60px -46px rgba(0,0,0,.9);
+  }
+  .mode-card:nth-child(1) { transform: rotateY(-8deg) translateZ(18px); }
+  .mode-card:nth-child(2) { transform: rotateY(-4deg) translateZ(36px); }
+  .mode-card:nth-child(3) { transform: translateZ(52px); }
+  .mode-card:nth-child(4) { transform: rotateY(4deg) translateZ(36px); }
+  .mode-card:nth-child(5) { transform: rotateY(8deg) translateZ(18px); }
+  .mode-card:hover {
+    border-color: rgba(110,231,200,0.55);
+    transform: translateY(-10px) translateZ(80px) rotateX(2deg);
+    background: var(--panel-2);
+  }
+
+  .gallery {
+    transform-style: preserve-3d;
+  }
+  .gallery-item {
+    transform: translateZ(0) rotateX(0deg);
+    box-shadow: 0 34px 90px -62px rgba(0,0,0,.95);
+  }
+  .gallery-item:nth-child(1) { transform: rotateY(-4deg) translateZ(36px); }
+  .gallery-item:nth-child(2) { transform: rotateY(5deg) translateZ(18px); }
+  .gallery-item:nth-child(3) { transform: rotateY(7deg) translateZ(44px); }
+  .gallery-item:nth-child(4) { transform: rotateX(3deg) translateZ(24px); }
+  .gallery-item:hover {
+    transform: translateY(-8px) translateZ(84px) rotateX(1deg);
+    border-color: rgba(25,195,238,.32);
+  }
+
+  .pricing-card {
+    position: relative;
+    overflow: hidden;
+    transform-style: preserve-3d;
+    transform: rotateX(3deg) translateZ(0);
+  }
+  .pricing-card.reveal-scale,
+  .pricing-card.depth-reveal,
+  .pricing-card.depth-reveal.depth-in {
+    opacity: 1;
+    transform: rotateX(3deg) translateZ(0);
+  }
+  .pricing-card::after {
+    content: "";
+    position: absolute;
+    inset: auto 12% -18px;
+    height: 34px;
+    background: radial-gradient(ellipse at center, rgba(25,195,238,.42), transparent 68%);
+    filter: blur(14px);
+    transform: translateZ(-40px);
+    pointer-events: none;
+  }
+  .pricing-card .kicker,
+  .pricing-card .price-amount,
+  .pricing-card .price-note,
+  .pricing-card .req-list,
+  .pricing-card .btn { position: relative; z-index: 2; transform: translateZ(28px); }
+
+  .faq-item {
+    transform: translateZ(0);
+    transition: transform .25s var(--ease), background .25s ease;
+  }
+  .faq-item.open {
+    transform: translateX(10px) translateZ(18px);
+    background: linear-gradient(90deg, rgba(25,195,238,.045), transparent);
+  }
+  .final-cta {
+    overflow: hidden;
+  }
+  .final-cta::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 18px;
+    width: min(620px, 90vw);
+    height: 180px;
+    transform: translateX(-50%) perspective(700px) rotateX(68deg);
+    background:
+      linear-gradient(rgba(25,195,238,.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(108,76,240,.08) 1px, transparent 1px);
+    background-size: 44px 44px;
+    opacity: .48;
+    pointer-events: none;
+  }
+
+  .depth-reveal {
+    opacity: 0;
+    transform: translateY(26px) translateZ(-60px) rotateX(5deg);
+    transition: opacity .75s var(--ease), transform .75s var(--ease);
+  }
+  .depth-reveal.depth-in {
+    opacity: 1;
+    transform: translateY(0) translateZ(0) rotateX(0deg);
+  }
+  .pricing-card.depth-reveal.depth-in {
+    transform: rotateX(3deg) translateZ(0);
+  }
+
+  @media (max-width: 860px) {
+    .feature-row .feature-text,
+    .feature-row .feature-visual,
+    .feature-row.reverse .feature-visual,
+    .steps,
+    .mode-card,
+    .mode-card:nth-child(n),
+    .gallery-item,
+    .gallery-item:nth-child(n),
+    .pricing-card {
+      transform: none;
+    }
+    .step:hover,
+    .mode-card:hover,
+    .gallery-item:hover {
+      transform: translateY(-4px);
+    }
+    .feature-row .feature-visual {
+      box-shadow: 0 28px 70px -44px rgba(25,195,238,.26);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .feature-row .feature-text,
+    .feature-row .feature-visual,
+    .feature-row.reverse .feature-visual,
+    .steps,
+    .step,
+    .mode-card,
+    .gallery-item,
+    .pricing-card,
+    .faq-item,
+    .depth-reveal,
+    .depth-reveal.depth-in {
+      transform: none !important;
+      transition: none !important;
+      opacity: 1 !important;
+    }
+  }
+
+
+  /* =====================================================
+     GALLERY LIGHTBOX + SCROLL 3D ZOOM
+     ===================================================== */
+  .gallery-item {
+    cursor: zoom-in;
+    isolation: isolate;
+  }
+  .gallery-item:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+  }
+  .gallery-item::after {
+    z-index: 2;
+  }
+  .gallery-item .tag {
+    z-index: 3;
+  }
+  .gallery-item .zoom-cue {
+    position: absolute;
+    right: 12px;
+    top: 12px;
+    z-index: 3;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: rgba(5,5,7,.72);
+    border: 1px solid rgba(255,255,255,.14);
+    color: #fff;
+    font-size: 17px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    opacity: 0;
+    transform: translateY(-6px) scale(.92);
+    transition: opacity .25s ease, transform .25s var(--ease);
+    pointer-events: none;
+  }
+  .gallery-item:hover .zoom-cue,
+  .gallery-item:focus-visible .zoom-cue {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  .scroll-zoom {
+    --scroll-zoom: 0;
+    --scroll-tilt: 0deg;
+    transform-style: preserve-3d;
+  }
+  .feature-visual.scroll-zoom,
+  .gallery-item.scroll-zoom,
+  .pricing-card.scroll-zoom {
+    transform:
+      perspective(1100px)
+      translateZ(calc(var(--scroll-zoom) * 58px))
+      rotateX(calc(var(--scroll-tilt) * .55))
+      scale(calc(.965 + var(--scroll-zoom) * .045));
+    transition: transform .12s linear, box-shadow .2s ease;
+  }
+  .gallery-item.scroll-zoom:nth-child(1),
+  .gallery-item.scroll-zoom:nth-child(2),
+  .gallery-item.scroll-zoom:nth-child(3),
+  .gallery-item.scroll-zoom:nth-child(4) {
+    transform:
+      perspective(1100px)
+      translateZ(calc(var(--scroll-zoom) * 70px))
+      rotateX(calc(var(--scroll-tilt) * .45))
+      rotateY(calc((var(--gallery-y, 0deg)) + var(--scroll-zoom) * 4deg))
+      scale(calc(.965 + var(--scroll-zoom) * .05));
+  }
+  .gallery-item.scroll-zoom:nth-child(1) { --gallery-y: -4deg; }
+  .gallery-item.scroll-zoom:nth-child(2) { --gallery-y: 5deg; }
+  .gallery-item.scroll-zoom:nth-child(3) { --gallery-y: 7deg; }
+  .gallery-item.scroll-zoom:nth-child(4) { --gallery-y: 0deg; }
+
+  .gallery-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    place-items: center;
+    padding: 32px;
+    background:
+      radial-gradient(circle at 50% 38%, rgba(25,195,238,.18), transparent 34%),
+      rgba(3,4,10,.88);
+    backdrop-filter: blur(22px);
+    -webkit-backdrop-filter: blur(22px);
+    opacity: 0;
+    pointer-events: none;
+    transform: perspective(900px) translateZ(-80px);
+    transition: opacity .28s ease, transform .38s var(--ease);
+  }
+  .gallery-lightbox.open {
+    opacity: 1;
+    pointer-events: auto;
+    transform: perspective(900px) translateZ(0);
+  }
+  .gallery-lightbox.closing {
+    opacity: 0;
+    transform: perspective(900px) translateZ(-120px) scale(.94);
+  }
+  .lightbox-stage {
+    width: min(1120px, calc(100vw - 64px));
+    max-height: calc(100vh - 150px);
+    display: grid;
+    place-items: center;
+    perspective: 1200px;
+  }
+  .lightbox-frame {
+    position: relative;
+    max-width: 100%;
+    max-height: 100%;
+    transform-style: preserve-3d;
+    transform: rotateX(8deg) scale(.82) translateY(30px);
+    transition: transform .42s var(--ease);
+  }
+  .gallery-lightbox.open .lightbox-frame {
+    transform: rotateX(0deg) scale(1) translateY(0);
+  }
+  .lightbox-frame img {
+    max-width: min(1120px, calc(100vw - 64px));
+    max-height: calc(100vh - 170px);
+    width: auto;
+    height: auto;
+    display: block;
+    object-fit: contain;
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,.16);
+    box-shadow:
+      0 70px 160px -60px rgba(0,0,0,.9),
+      0 0 80px rgba(25,195,238,.18);
+    background: #050507;
+  }
+  .lightbox-caption {
+    margin-top: 18px;
+    color: #fff;
+    font-size: 14px;
+    text-align: center;
+    opacity: .9;
+  }
+  .lightbox-btn {
+    position: absolute;
+    border: 1px solid rgba(255,255,255,.16);
+    background: rgba(9,12,24,.72);
+    color: #fff;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: transform .18s ease, background .18s ease;
+  }
+  .lightbox-btn:hover {
+    transform: scale(1.06);
+    background: rgba(25,195,238,.16);
+  }
+  .lightbox-close {
+    top: 22px;
+    right: 22px;
+    width: 46px;
+    height: 46px;
+    font-size: 28px;
+  }
+  .lightbox-prev,
+  .lightbox-next {
+    top: 50%;
+    width: 54px;
+    height: 54px;
+    font-size: 34px;
+    transform: translateY(-50%);
+  }
+  .lightbox-prev { left: 22px; }
+  .lightbox-next { right: 22px; }
+  body.lightbox-open {
+    overflow: hidden;
+  }
+
+  @media (max-width: 760px) {
+    .gallery-item .zoom-cue {
+      opacity: 1;
+      transform: none;
+      width: 34px;
+      height: 34px;
+    }
+    .gallery-lightbox {
+      padding: 18px;
+    }
+    .lightbox-stage {
+      width: calc(100vw - 36px);
+      max-height: calc(100vh - 120px);
+    }
+    .lightbox-frame img {
+      max-width: calc(100vw - 36px);
+      max-height: calc(100vh - 142px);
+      border-radius: 14px;
+    }
+    .lightbox-close {
+      top: 14px;
+      right: 14px;
+      width: 44px;
+      height: 44px;
+    }
+    .lightbox-prev,
+    .lightbox-next {
+      width: 46px;
+      height: 46px;
+      top: auto;
+      bottom: 18px;
+      transform: none;
+    }
+    .lightbox-prev { left: 18px; }
+    .lightbox-next { right: 18px; }
+    .feature-visual.scroll-zoom,
+    .gallery-item.scroll-zoom,
+    .pricing-card.scroll-zoom,
+    .gallery-item.scroll-zoom:nth-child(n) {
+      transform: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gallery-lightbox,
+    .lightbox-frame,
+    .scroll-zoom,
+    .feature-visual.scroll-zoom,
+    .gallery-item.scroll-zoom,
+    .pricing-card.scroll-zoom {
+      transition: none !important;
+      transform: none !important;
+    }
+  }
+
+
+  /* =====================================================
+     TREND SHOTS + BEAT PREVIEW
+     ===================================================== */
+  .trend-shot img {
+    background: #050507;
+  }
+  .trend-lab {
+    position: relative;
+    overflow: hidden;
+    padding: 105px 0 115px;
+    background:
+      radial-gradient(circle at 20% 20%, rgba(245,185,66,.09), transparent 28%),
+      radial-gradient(circle at 82% 28%, rgba(25,195,238,.15), transparent 34%),
+      linear-gradient(180deg, #050507, #070914 48%, #050507);
+  }
+  .trend-lab::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(rgba(25,195,238,.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(108,76,240,.045) 1px, transparent 1px);
+    background-size: 54px 54px;
+    transform: perspective(720px) rotateX(62deg) translateY(160px) scale(1.2);
+    transform-origin: 50% 100%;
+    opacity: .55;
+  }
+  .trend-lab-inner {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: .9fr 1.1fr;
+    gap: 54px;
+    align-items: center;
+  }
+  .trend-lab-copy p {
+    color: var(--hero2-text-dim);
+    font-size: 17px;
+    line-height: 1.68;
+    margin: 0 0 26px;
+  }
+  .trend-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 26px;
+  }
+  .trend-pill {
+    border: 1px solid rgba(255,255,255,.1);
+    background: rgba(255,255,255,.04);
+    border-radius: 999px;
+    padding: 9px 13px;
+    color: #cfd2dd;
+    font-size: 13px;
+  }
+  .beat-preview {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid rgba(25,195,238,.32);
+    background: linear-gradient(100deg, rgba(25,195,238,.14), rgba(108,76,240,.18));
+    color: #fff;
+    border-radius: 999px;
+    padding: 13px 18px;
+    cursor: pointer;
+    font-weight: 700;
+    box-shadow: 0 18px 42px -28px rgba(25,195,238,.8);
+  }
+  .beat-preview .beat-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 18px var(--accent);
+  }
+  .beat-preview.playing .beat-dot {
+    animation: beat-dot-pop .42s ease-in-out infinite;
+  }
+  @keyframes beat-dot-pop {
+    0%,100% { transform: scale(.8); opacity: .72; }
+    50% { transform: scale(1.35); opacity: 1; }
+  }
+  .trend-stack {
+    position: relative;
+    min-height: 520px;
+    perspective: 1200px;
+  }
+  .trend-panel {
+    position: absolute;
+    width: min(420px, 80%);
+    border-radius: 22px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,.14);
+    background: rgba(10,14,28,.76);
+    box-shadow: 0 50px 130px -72px rgba(25,195,238,.5);
+    transform-style: preserve-3d;
+  }
+  .trend-panel img {
+    width: 100%;
+    display: block;
+  }
+  .trend-panel.one { left: 2%; top: 0; transform: rotateY(-13deg) rotateX(4deg) translateZ(40px); }
+  .trend-panel.two { right: 0; top: 125px; transform: rotateY(10deg) rotateX(2deg) translateZ(96px); }
+  .trend-panel.three { left: 15%; bottom: 0; transform: rotateY(-4deg) rotateX(-5deg) translateZ(64px); }
+  .trend-panel span {
+    position: absolute;
+    left: 14px;
+    bottom: 14px;
+    border-radius: 999px;
+    padding: 7px 12px;
+    background: rgba(5,5,7,.74);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,.12);
+    font-size: 12px;
+    backdrop-filter: blur(8px);
+  }
+
+  @media (max-width: 900px) {
+    .trend-lab-inner { grid-template-columns: 1fr; }
+    .trend-stack { min-height: 680px; }
+  }
+  @media (max-width: 560px) {
+    .trend-lab { padding: 76px 0 82px; }
+    .trend-stack { min-height: auto; display: grid; gap: 14px; }
+    .trend-panel,
+    .trend-panel.one,
+    .trend-panel.two,
+    .trend-panel.three {
+      position: relative;
+      inset: auto;
+      width: 100%;
+      transform: none;
+    }
+    .beat-preview { width: 100%; justify-content: center; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .beat-preview.playing .beat-dot { animation: none !important; }
+    .trend-panel,
+    .trend-panel.one,
+    .trend-panel.two,
+    .trend-panel.three { transform: none !important; }
+  }
+
   /* ---------- MOBILE AUDIT FIXES / POLISH ---------- */
   section { content-visibility: auto; contain-intrinsic-size: 780px; }
   img { max-width: 100%; height: auto; }
@@ -1009,6 +1945,10 @@
 <header class="hero2">
   <div class="hero2-bg-glow" data-parallax="-6"></div>
 
+  <div class="hero3d-scene" aria-hidden="true">
+    <canvas id="hero3dCanvas"></canvas>
+  </div>
+
   <div class="hero2-grid">
 
     <!-- LEFT: copy column -->
@@ -1126,6 +2066,75 @@
     <div class="req-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M8 6V4h8v2"/></svg><span data-lang-el="pl">Jednorazowy zakup</span><span data-lang-el="en">One-time Purchase</span></div>
   </div>
 </header>
+
+
+<section id="experience" class="experience3d">
+  <div class="wrap experience3d-grid">
+    <div class="experience3d-copy reveal">
+      <div class="kicker" data-lang-el="pl">Pełny workflow 3D</div>
+      <div class="kicker" data-lang-el="en">Full 3D workflow</div>
+      <h2 data-lang-el="pl">Zobacz, jak beat przechodzi przez cały proces.</h2>
+      <h2 data-lang-el="en">See the beat move through the whole process.</h2>
+      <p data-lang-el="pl">Strona pokazuje BassMarker Pro jako przestrzenny system: audio wpada do analizy, AI wyciąga punkty rytmu, a gotowe markery lądują na timeline Final Cut Pro.</p>
+      <p data-lang-el="en">The page presents BassMarker Pro as a spatial system: audio enters analysis, AI extracts rhythm points, and finished markers land on the Final Cut Pro timeline.</p>
+
+      <div class="experience3d-list">
+        <div class="mini-card">
+          <div class="mini-ic">01</div>
+          <div><strong data-lang-el="pl">Audio jako fala</strong><strong data-lang-el="en">Audio as a wave</strong><span data-lang-el="pl">Dane dźwiękowe są pokazane jako głębia, nie płaski pasek.</span><span data-lang-el="en">Sound data is presented as depth, not a flat strip.</span></div>
+        </div>
+        <div class="mini-card">
+          <div class="mini-ic">02</div>
+          <div><strong data-lang-el="pl">Detekcja jako rdzeń</strong><strong data-lang-el="en">Detection as a core</strong><span data-lang-el="pl">Centralny moduł symbolizuje analizę beatów i basu.</span><span data-lang-el="en">The central module represents beat and bass analysis.</span></div>
+        </div>
+        <div class="mini-card">
+          <div class="mini-ic">03</div>
+          <div><strong data-lang-el="pl">Markery jako orbity</strong><strong data-lang-el="en">Markers as orbits</strong><span data-lang-el="pl">Każdy punkt rytmu dostaje własne miejsce w przestrzeni.</span><span data-lang-el="en">Each rhythm point gets its own place in space.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="workflow3d reveal-scale" data-workflow3d>
+      <div class="workflow3d-stage">
+        <div class="workflow3d-ring" style="--ring-size: 440px; --z: 0px; --r: 8deg; --speed: 16s;"></div>
+        <div class="workflow3d-ring" style="--ring-size: 330px; --z: 64px; --r: -18deg; --speed: 12s;"></div>
+        <div class="workflow3d-ring" style="--ring-size: 230px; --z: 128px; --r: 28deg; --speed: 9s;"></div>
+
+        <div class="workflow3d-core"><span>AI</span></div>
+
+        <div class="workflow3d-card input">
+          <h3 data-lang-el="pl">Import audio</h3><h3 data-lang-el="en">Audio import</h3>
+          <p data-lang-el="pl">Wrzucasz utwór, a system buduje mapę energii.</p>
+          <p data-lang-el="en">Drop a track and the system builds an energy map.</p>
+          <div class="card-line"><i style="height:42%"></i><i style="height:76%"></i><i style="height:51%"></i><i style="height:88%"></i><i style="height:58%"></i></div>
+        </div>
+        <div class="workflow3d-card detect">
+          <h3 data-lang-el="pl">Detekcja beatów</h3><h3 data-lang-el="en">Beat detection</h3>
+          <p data-lang-el="pl">Algorytm wybiera bas, kick, snare albo pełną siatkę.</p>
+          <p data-lang-el="en">The algorithm targets bass, kick, snare, or a full grid.</p>
+          <div class="card-line"><i style="height:70%"></i><i style="height:38%"></i><i style="height:92%"></i><i style="height:44%"></i><i style="height:81%"></i></div>
+        </div>
+        <div class="workflow3d-card timeline">
+          <h3 data-lang-el="pl">Timeline FCP</h3><h3 data-lang-el="en">FCP timeline</h3>
+          <p data-lang-el="pl">Markery trafiają w konkretne klatki projektu.</p>
+          <p data-lang-el="en">Markers land on exact frames in the project.</p>
+          <div class="card-line"><i style="height:36%"></i><i style="height:64%"></i><i style="height:90%"></i><i style="height:53%"></i><i style="height:74%"></i></div>
+        </div>
+        <div class="workflow3d-card export">
+          <h3 data-lang-el="pl">Gotowe cięcia</h3><h3 data-lang-el="en">Ready cuts</h3>
+          <p data-lang-el="pl">Montaż zostaje zsynchronizowany z rytmem.</p>
+          <p data-lang-el="en">The edit is synced to the rhythm.</p>
+          <div class="card-line"><i style="height:58%"></i><i style="height:84%"></i><i style="height:46%"></i><i style="height:68%"></i><i style="height:96%"></i></div>
+        </div>
+
+        <span class="workflow3d-marker" style="--x:18%; --y:36%; --z:160px; --speed:3.2s;"></span>
+        <span class="workflow3d-marker" style="--x:68%; --y:20%; --z:116px; --speed:3.8s;"></span>
+        <span class="workflow3d-marker" style="--x:78%; --y:64%; --z:178px; --speed:3.5s;"></span>
+        <span class="workflow3d-marker" style="--x:34%; --y:74%; --z:86px; --speed:4.1s;"></span>
+      </div>
+    </div>
+  </div>
+</section>
 
 <section id="how">
   <div class="wrap">
@@ -1335,6 +2344,53 @@
         <span class="tag" data-lang-el="pl">Twoje stanowisko montażowe</span>
         <span class="tag" data-lang-el="en">Your edit desk</span>
       </div>
+
+      <div class="gallery-item trend-shot" style="--i:4">
+        <img src="shot-ai-beat-lab.svg" alt="AI beat lab visual with orbiting marker cards" width="1200" height="760" loading="lazy" decoding="async">
+        <span class="tag" data-lang-el="pl">AI beat lab</span>
+        <span class="tag" data-lang-el="en">AI beat lab</span>
+      </div>
+      <div class="gallery-item trend-shot" style="--i:5">
+        <img src="shot-neon-timeline.svg" alt="Neon Final Cut Pro timeline with beat markers" width="1200" height="760" loading="lazy" decoding="async">
+        <span class="tag" data-lang-el="pl">Neonowy timeline</span>
+        <span class="tag" data-lang-el="en">Neon timeline</span>
+      </div>
+      <div class="gallery-item trend-shot" style="--i:6">
+        <img src="shot-creator-desk.svg" alt="Creator desk with beat synced editing setup" width="1200" height="760" loading="lazy" decoding="async">
+        <span class="tag" data-lang-el="pl">Creator desk</span>
+        <span class="tag" data-lang-el="en">Creator desk</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section id="trends" class="trend-lab">
+  <div class="wrap trend-lab-inner">
+    <div class="trend-lab-copy reveal">
+      <div class="kicker" data-lang-el="pl">Trendy montażowe</div>
+      <div class="kicker" data-lang-el="en">Editing trends</div>
+      <h2 data-lang-el="pl">Więcej energii dla shortów, reelsów i trailerów.</h2>
+      <h2 data-lang-el="en">More energy for shorts, reels, and trailers.</h2>
+      <p data-lang-el="pl">Dodałem nowe wygenerowane ujęcia oraz prosty beat preview. Nie startuje sam — użytkownik włącza go kliknięciem, więc strona nie irytuje dźwiękiem po wejściu.</p>
+      <p data-lang-el="en">New generated shots and a simple beat preview are now included. It never autoplays — the user starts it with a click.</p>
+      <button class="beat-preview" type="button" data-beat-preview>
+        <span class="beat-dot"></span>
+        <span data-lang-el="pl">Włącz beat preview</span>
+        <span data-lang-el="en">Play beat preview</span>
+      </button>
+      <div class="trend-pills">
+        <span class="trend-pill">AI edits</span>
+        <span class="trend-pill">Reels / Shorts</span>
+        <span class="trend-pill">Automotive cuts</span>
+        <span class="trend-pill">Phonk / bass drops</span>
+        <span class="trend-pill">Trailer rhythm</span>
+      </div>
+    </div>
+    <div class="trend-stack reveal-scale">
+      <div class="trend-panel one"><img src="shot-ai-beat-lab.svg" alt="AI beat lab visual with orbiting marker cards" loading="lazy" decoding="async"><span>AI beat lab</span></div>
+      <div class="trend-panel two"><img src="shot-neon-timeline.svg" alt="Neon Final Cut Pro timeline with beat markers" loading="lazy" decoding="async"><span>Neon timeline</span></div>
+      <div class="trend-panel three"><img src="shot-creator-desk.svg" alt="Creator desk with beat synced editing setup" loading="lazy" decoding="async"><span>Creator desk</span></div>
     </div>
   </div>
 </section>
@@ -1634,6 +2690,525 @@
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
     applyParallax();
+  })();
+
+
+  // ---- full 3D hero scene: orbiting markers, waveform grid, app plate ----
+  (function(){
+    const canvas = document.getElementById('hero3dCanvas');
+    const hero = document.querySelector('.hero2');
+    if (!canvas || !hero) return;
+
+    const ctx = canvas.getContext('2d', { alpha: true });
+    if (!ctx) return;
+
+    const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const pointer = { x: 0, y: 0, tx: 0, ty: 0 };
+    const state = { w: 0, h: 0, dpr: 1, start: performance.now(), frame: 0 };
+
+    const markers = Array.from({ length: 34 }, (_, i) => ({
+      a: i * 0.61,
+      r: 120 + (i % 6) * 34,
+      y: -120 + (i % 9) * 28,
+      speed: .28 + (i % 5) * .035,
+      hue: i % 3
+    }));
+
+    function resize(){
+      const rect = hero.getBoundingClientRect();
+      state.w = Math.max(1, Math.round(rect.width));
+      state.h = Math.max(520, Math.round(rect.height));
+      state.dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.round(state.w * state.dpr);
+      canvas.height = Math.round(state.h * state.dpr);
+      canvas.style.width = state.w + 'px';
+      canvas.style.height = state.h + 'px';
+      ctx.setTransform(state.dpr, 0, 0, state.dpr, 0, 0);
+    }
+
+    function project(x, y, z){
+      const depth = 760;
+      const scale = depth / (depth + z);
+      const cx = state.w * (state.w < 760 ? .57 : .64);
+      const cy = state.h * (state.w < 760 ? .42 : .48);
+      return {
+        x: cx + (x + pointer.x * 34) * scale,
+        y: cy + (y + pointer.y * 24) * scale,
+        s: scale,
+        visible: z > -720
+      };
+    }
+
+    function line3d(a, b, color, width){
+      const pa = project(a[0], a[1], a[2]);
+      const pb = project(b[0], b[1], b[2]);
+      if (!pa.visible || !pb.visible) return;
+      ctx.strokeStyle = color;
+      ctx.lineWidth = width * Math.min(pa.s, pb.s);
+      ctx.beginPath();
+      ctx.moveTo(pa.x, pa.y);
+      ctx.lineTo(pb.x, pb.y);
+      ctx.stroke();
+    }
+
+    function poly(points, fill, stroke){
+      const pp = points.map(p => project(p[0], p[1], p[2])).filter(p => p.visible);
+      if (pp.length !== points.length) return;
+      ctx.beginPath();
+      pp.forEach((p, i) => i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y));
+      ctx.closePath();
+      if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+      if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = 1; ctx.stroke(); }
+    }
+
+    function drawGrid(t){
+      for (let i = -7; i <= 7; i++) {
+        const fade = 1 - Math.min(Math.abs(i) / 8, .85);
+        const color = `rgba(25,195,238,${0.07 * fade})`;
+        line3d([-520, 170, i * 70], [520, 170, i * 70], color, 1);
+        line3d([i * 70, 170, -520], [i * 70, 170, 520], color, 1);
+      }
+      for (let i = 0; i < 18; i++) {
+        const z = -460 + i * 54;
+        const wave = Math.sin(t * 1.8 + i * .6) * 34 + Math.cos(i * .9) * 16;
+        line3d([-420 + i * 34, 88 - wave, z], [-420 + i * 34, 170, z], 'rgba(108,76,240,.22)', 3);
+      }
+    }
+
+    function drawAppPlate(t){
+      const z = -80 + Math.sin(t * .9) * 16;
+      const x = state.w < 760 ? 20 : 170;
+      const y = -34;
+      const w = state.w < 760 ? 270 : 360;
+      const h = state.w < 760 ? 180 : 230;
+      poly([[x-w/2,y-h/2,z],[x+w/2,y-h/2,z+36],[x+w/2,y+h/2,z+18],[x-w/2,y+h/2,z-28]], 'rgba(10,14,28,.38)', 'rgba(255,255,255,.16)');
+      for (let i = 0; i < 12; i++) {
+        const bx = x - w * .38 + i * (w * .07);
+        const bh = 18 + Math.abs(Math.sin(t * 2.2 + i)) * 72;
+        line3d([bx, y + h * .24, z - 10 + i * 3], [bx, y + h * .24 - bh, z - 10 + i * 3], i % 3 ? 'rgba(25,195,238,.58)' : 'rgba(245,166,35,.72)', 5);
+      }
+      line3d([x-w*.42, y-h*.22, z], [x+w*.42, y-h*.22, z+28], 'rgba(255,255,255,.18)', 1);
+      line3d([x-w*.42, y+h*.05, z-8], [x+w*.42, y+h*.05, z+20], 'rgba(25,195,238,.22)', 1);
+    }
+
+    function drawMarkers(t){
+      markers.forEach((m, i) => {
+        const a = m.a + t * m.speed;
+        const x = Math.cos(a) * m.r + (state.w < 760 ? 35 : 150);
+        const z = Math.sin(a) * m.r;
+        const y = m.y + Math.sin(t * 1.7 + i) * 20;
+        const p = project(x, y, z);
+        if (!p.visible) return;
+        const alpha = Math.max(.18, Math.min(.9, p.s * .68));
+        const color = m.hue === 0 ? `rgba(25,195,238,${alpha})` : m.hue === 1 ? `rgba(110,231,200,${alpha})` : `rgba(245,166,35,${alpha})`;
+        ctx.fillStyle = color;
+        ctx.shadowColor = color;
+        ctx.shadowBlur = 14 * p.s;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 5.8 * p.s, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+        line3d([x, y + 9, z], [x, y + 48, z], color.replace(/[\d.]+\)$/,'0.28)'), 1.2);
+      });
+    }
+
+    function render(now){
+      const t = reduced ? 2.2 : (now - state.start) / 1000;
+      pointer.x += (pointer.tx - pointer.x) * .055;
+      pointer.y += (pointer.ty - pointer.y) * .055;
+      ctx.clearRect(0, 0, state.w, state.h);
+      ctx.globalCompositeOperation = 'source-over';
+      const grad = ctx.createRadialGradient(state.w * .72, state.h * .28, 40, state.w * .66, state.h * .42, Math.max(state.w, state.h) * .72);
+      grad.addColorStop(0, 'rgba(25,195,238,.13)');
+      grad.addColorStop(.45, 'rgba(108,76,240,.08)');
+      grad.addColorStop(1, 'rgba(4,5,13,0)');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, state.w, state.h);
+      drawGrid(t);
+      drawAppPlate(t);
+      drawMarkers(t);
+      if (!reduced) state.frame = requestAnimationFrame(render);
+    }
+
+    function onPointer(e){
+      const r = hero.getBoundingClientRect();
+      pointer.tx = ((e.clientX - r.left) / r.width - .5) * 2;
+      pointer.ty = ((e.clientY - r.top) / r.height - .5) * 2;
+    }
+
+    resize();
+    render(performance.now());
+    window.addEventListener('resize', resize, { passive: true });
+    hero.addEventListener('pointermove', onPointer, { passive: true });
+  })();
+
+
+  // ---- 3D workflow section: scroll and pointer depth ----
+  (function(){
+    const scene = document.querySelector('[data-workflow3d]');
+    if (!scene) return;
+    const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) return;
+    let ticking = false;
+
+    function updateScene(){
+      const rect = scene.getBoundingClientRect();
+      const vh = window.innerHeight || document.documentElement.clientHeight;
+      const progress = Math.max(0, Math.min(1, (vh - rect.top) / (vh + rect.height)));
+      scene.style.setProperty('--scene-progress', progress.toFixed(3));
+      ticking = false;
+    }
+
+    function queueUpdate(){
+      if (!ticking) {
+        window.requestAnimationFrame(updateScene);
+        ticking = true;
+      }
+    }
+
+    scene.addEventListener('pointermove', (event) => {
+      const rect = scene.getBoundingClientRect();
+      const x = ((event.clientX - rect.left) / rect.width - .5) * 10;
+      scene.style.setProperty('--scene-tilt', x.toFixed(2) + 'deg');
+    }, { passive: true });
+    scene.addEventListener('pointerleave', () => {
+      scene.style.setProperty('--scene-tilt', '0deg');
+    }, { passive: true });
+    window.addEventListener('scroll', queueUpdate, { passive: true });
+    window.addEventListener('resize', queueUpdate);
+    updateScene();
+  })();
+
+
+  // ---- full-site 3D polish: section depth reveals and cursor highlights ----
+  (function(){
+    const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const depthTargets = document.querySelectorAll('.feature-row, .steps, .modes, .gallery, .pricing-card, #faq .faq-item, .final-cta .wrap');
+    depthTargets.forEach(el => el.classList.add('depth-reveal'));
+    if (reduced) {
+      depthTargets.forEach(el => el.classList.add('depth-in'));
+      return;
+    }
+
+    try {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('depth-in');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+      depthTargets.forEach(el => io.observe(el));
+    } catch (err) {
+      depthTargets.forEach(el => el.classList.add('depth-in'));
+    }
+
+    const glowTargets = document.querySelectorAll('.feature-visual, .mode-card, .gallery-item, .pricing-card');
+    glowTargets.forEach(el => {
+      el.addEventListener('pointermove', event => {
+        const rect = el.getBoundingClientRect();
+        const mx = ((event.clientX - rect.left) / rect.width) * 100;
+        const my = ((event.clientY - rect.top) / rect.height) * 100;
+        el.style.setProperty('--mx', mx.toFixed(1) + '%');
+        el.style.setProperty('--my', my.toFixed(1) + '%');
+      }, { passive: true });
+    });
+
+    const rows = document.querySelectorAll('.feature-row');
+    function updateRows(){
+      const vh = window.innerHeight || document.documentElement.clientHeight;
+      rows.forEach(row => {
+        const r = row.getBoundingClientRect();
+        const p = Math.max(0, Math.min(1, (vh - r.top) / (vh + r.height)));
+        row.style.setProperty('--row-depth', p.toFixed(3));
+      });
+    }
+    window.addEventListener('scroll', () => window.requestAnimationFrame(updateRows), { passive: true });
+    window.addEventListener('resize', updateRows);
+    updateRows();
+  })();
+
+
+  // ---- obvious hero 3D mouse interaction ----
+  (function(){
+    const hero = document.querySelector('.hero2');
+    if (!hero) return;
+    const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) return;
+
+    const card = hero.querySelector('.hero2-card');
+    const mascot = hero.querySelector('.hero2-mascot');
+    const canvas = hero.querySelector('#hero3dCanvas');
+    const glow = hero.querySelector('.hero2-bg-glow');
+    if (!card && !mascot && !canvas) return;
+
+    let frame = 0;
+    let targetX = 0;
+    let targetY = 0;
+    let currentX = 0;
+    let currentY = 0;
+
+    function paint(){
+      currentX += (targetX - currentX) * 0.18;
+      currentY += (targetY - currentY) * 0.18;
+      const rotY = currentX * 13;
+      const rotX = -currentY * 10;
+      const lift = Math.min(34, 18 + Math.abs(currentX) * 10 + Math.abs(currentY) * 8);
+
+      if (card) {
+        card.style.transform = `perspective(900px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) translate3d(${(currentX * 18).toFixed(1)}px, ${(currentY * 10 - 8).toFixed(1)}px, ${lift.toFixed(1)}px)`;
+      }
+      if (mascot) {
+        mascot.style.transform = `translate3d(${(-currentX * 34).toFixed(1)}px, ${(-currentY * 18).toFixed(1)}px, 52px) rotateY(${(-currentX * 18).toFixed(2)}deg) rotateX(${(currentY * 8).toFixed(2)}deg)`;
+      }
+      if (canvas) {
+        canvas.style.transform = `translate3d(${(currentX * -18).toFixed(1)}px, ${(currentY * -12).toFixed(1)}px, 0) scale(1.035)`;
+      }
+      if (glow) {
+        glow.style.transform = `translate(${(currentX * 2.5).toFixed(2)}%, ${(currentY * 2).toFixed(2)}%) scale(1.08)`;
+      }
+
+      if (Math.abs(targetX - currentX) > .002 || Math.abs(targetY - currentY) > .002) {
+        frame = window.requestAnimationFrame(paint);
+      } else {
+        frame = 0;
+      }
+    }
+
+    function queue(){
+      if (!frame) frame = window.requestAnimationFrame(paint);
+    }
+
+    hero.addEventListener('pointermove', (event) => {
+      if (event.pointerType === 'touch') return;
+      const rect = hero.getBoundingClientRect();
+      targetX = ((event.clientX - rect.left) / rect.width - .5) * 2;
+      targetY = ((event.clientY - rect.top) / rect.height - .5) * 2;
+      hero.classList.add('is-pointer-active');
+      queue();
+    }, { passive: true });
+
+    hero.addEventListener('pointerleave', () => {
+      targetX = 0;
+      targetY = 0;
+      hero.classList.remove('is-pointer-active');
+      queue();
+      window.setTimeout(() => {
+        if (Math.abs(currentX) < .02 && Math.abs(currentY) < .02) {
+          if (card) card.style.transform = '';
+          if (mascot) mascot.style.transform = '';
+          if (canvas) canvas.style.transform = '';
+          if (glow) glow.style.transform = '';
+        }
+      }, 420);
+    }, { passive: true });
+  })();
+
+
+  // ---- gallery lightbox with 3D zoom transition ----
+  (function(){
+    const items = Array.from(document.querySelectorAll('.gallery-item'));
+    if (!items.length) return;
+
+    const galleryData = items.map((item, index) => {
+      const img = item.querySelector('img');
+      const caption = item.querySelector('[data-lang-el="pl"]') || item.querySelector('.tag');
+      item.setAttribute('role', 'button');
+      item.setAttribute('tabindex', '0');
+      item.setAttribute('aria-label', (caption?.textContent || img?.alt || 'Powiększ zdjęcie').trim());
+      if (!item.querySelector('.zoom-cue')) {
+        const cue = document.createElement('span');
+        cue.className = 'zoom-cue';
+        cue.setAttribute('aria-hidden', 'true');
+        cue.textContent = '⌕';
+        item.appendChild(cue);
+      }
+      return {
+        index,
+        src: img?.getAttribute('src') || '',
+        alt: img?.getAttribute('alt') || '',
+        caption: (caption?.textContent || img?.alt || '').trim()
+      };
+    }).filter(item => item.src);
+
+    if (!galleryData.length) return;
+
+    const overlay = document.createElement('div');
+    overlay.className = 'gallery-lightbox';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    overlay.setAttribute('aria-label', 'Podgląd zdjęcia');
+    overlay.innerHTML = `
+      <button class="lightbox-btn lightbox-close" type="button" aria-label="Zamknij">×</button>
+      <button class="lightbox-btn lightbox-prev" type="button" aria-label="Poprzednie zdjęcie">‹</button>
+      <div class="lightbox-stage">
+        <figure class="lightbox-frame">
+          <img alt="">
+          <figcaption class="lightbox-caption"></figcaption>
+        </figure>
+      </div>
+      <button class="lightbox-btn lightbox-next" type="button" aria-label="Następne zdjęcie">›</button>
+    `;
+    document.body.appendChild(overlay);
+
+    const image = overlay.querySelector('img');
+    const caption = overlay.querySelector('.lightbox-caption');
+    const closeBtn = overlay.querySelector('.lightbox-close');
+    const prevBtn = overlay.querySelector('.lightbox-prev');
+    const nextBtn = overlay.querySelector('.lightbox-next');
+    let current = 0;
+
+    function render(index) {
+      current = (index + galleryData.length) % galleryData.length;
+      const data = galleryData[current];
+      image.src = data.src;
+      image.alt = data.alt || data.caption;
+      caption.textContent = data.caption;
+    }
+
+    function open(index) {
+      render(index);
+      document.body.classList.add('lightbox-open');
+      overlay.classList.remove('closing');
+      overlay.classList.add('open');
+      closeBtn.focus({ preventScroll: true });
+    }
+
+    function close() {
+      overlay.classList.add('closing');
+      overlay.classList.remove('open');
+      document.body.classList.remove('lightbox-open');
+      window.setTimeout(() => overlay.classList.remove('closing'), 320);
+    }
+
+    items.forEach((item, index) => {
+      item.addEventListener('click', () => open(index));
+      item.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          open(index);
+        }
+      });
+    });
+
+    closeBtn.addEventListener('click', close);
+    prevBtn.addEventListener('click', () => render(current - 1));
+    nextBtn.addEventListener('click', () => render(current + 1));
+    overlay.addEventListener('click', event => {
+      if (event.target === overlay) close();
+    });
+    window.addEventListener('keydown', event => {
+      if (!overlay.classList.contains('open')) return;
+      if (event.key === 'Escape') close();
+      if (event.key === 'ArrowLeft') render(current - 1);
+      if (event.key === 'ArrowRight') render(current + 1);
+    });
+  })();
+
+  // ---- scroll-driven 3D zoom transitions for visual blocks ----
+  (function(){
+    const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) return;
+    const zoomTargets = Array.from(document.querySelectorAll('.feature-visual, .gallery-item, .pricing-card'));
+    if (!zoomTargets.length) return;
+    zoomTargets.forEach(el => el.classList.add('scroll-zoom'));
+    let ticking = false;
+
+    function layoutTop(el) {
+      let y = 0;
+      let node = el;
+      while (node) {
+        y += node.offsetTop || 0;
+        node = node.offsetParent;
+      }
+      return y;
+    }
+
+    function updateZoom() {
+      const vh = window.innerHeight || document.documentElement.clientHeight;
+      const scrollY = window.scrollY || window.pageYOffset;
+      zoomTargets.forEach(el => {
+        const center = layoutTop(el) - scrollY + el.offsetHeight / 2;
+        const distance = Math.abs(center - vh / 2);
+        const normalized = Math.max(0, Math.min(1, 1 - distance / (vh * .72)));
+        const tilt = Math.max(-6, Math.min(6, ((center - vh / 2) / vh) * -8));
+        el.style.setProperty('--scroll-zoom', normalized.toFixed(3));
+        el.style.setProperty('--scroll-tilt', tilt.toFixed(2) + 'deg');
+      });
+      ticking = false;
+    }
+
+    function queueZoom() {
+      if (!ticking) {
+        window.requestAnimationFrame(updateZoom);
+        ticking = true;
+      }
+      window.clearTimeout(queueZoom._settleTimer);
+      queueZoom._settleTimer = window.setTimeout(updateZoom, 120);
+    }
+
+    window.addEventListener('scroll', queueZoom, { passive: true });
+    window.addEventListener('resize', queueZoom);
+    updateZoom();
+  })();
+
+
+  // ---- optional beat preview: user-triggered, no autoplay ----
+  (function(){
+    const button = document.querySelector('[data-beat-preview]');
+    if (!button) return;
+    let ctx;
+    let timer = 0;
+    let playing = false;
+
+    function playKick(time, frequency, gainValue) {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(frequency, time);
+      osc.frequency.exponentialRampToValueAtTime(48, time + .14);
+      gain.gain.setValueAtTime(gainValue, time);
+      gain.gain.exponentialRampToValueAtTime(.001, time + .18);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(time);
+      osc.stop(time + .2);
+    }
+
+    function tick() {
+      if (!playing || !ctx) return;
+      const now = ctx.currentTime;
+      playKick(now, 110, .16);
+      playKick(now + .25, 160, .06);
+      timer = window.setTimeout(tick, 500);
+    }
+
+    function setButtonState(nextPlaying) {
+      playing = nextPlaying;
+      button.classList.toggle('playing', playing);
+      const pl = button.querySelector('[data-lang-el="pl"]');
+      const en = button.querySelector('[data-lang-el="en"]');
+      if (pl) pl.textContent = playing ? 'Wyłącz beat preview' : 'Włącz beat preview';
+      if (en) en.textContent = playing ? 'Stop beat preview' : 'Play beat preview';
+    }
+
+    button.addEventListener('click', async () => {
+      const nextPlaying = !playing;
+      setButtonState(nextPlaying);
+      window.clearTimeout(timer);
+      if (!nextPlaying) return;
+
+      try {
+        const AudioCtor = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtor) return;
+        if (!ctx) ctx = new AudioCtor();
+        if (ctx.state === 'suspended') await ctx.resume();
+        tick();
+      } catch (err) {
+        // Visual feedback still works when the browser blocks Web Audio.
+      }
+    });
   })();
 
   // =====================================================
