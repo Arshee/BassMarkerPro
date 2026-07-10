@@ -995,7 +995,11 @@
   .workflow3d {
     --scene-tilt: 0deg;
     --scene-progress: 0;
-    min-height: 520px;
+    --scene-spread: 26;
+    --scene-depth: 0;
+    --gyro-x: 0deg;
+    --gyro-y: 0deg;
+    min-height: 560px;
     position: relative;
     perspective: 1200px;
   }
@@ -1003,7 +1007,10 @@
     position: absolute;
     inset: 0;
     transform-style: preserve-3d;
-    transform: rotateX(calc(58deg - var(--scene-progress) * 10deg)) rotateZ(calc(-8deg + var(--scene-tilt))) translateY(18px);
+    transform:
+      rotateX(calc(58deg - var(--scene-progress) * 10deg + var(--gyro-y)))
+      rotateZ(calc(-8deg + var(--scene-tilt) + var(--gyro-x)))
+      translateY(18px);
     transition: transform .22s ease-out;
   }
   .workflow3d-core {
@@ -1103,10 +1110,84 @@
     0%,100% { transform: scaleY(.55); }
     50% { transform: scaleY(1); }
   }
-  .workflow3d-card.input { left: 2%; top: 8%; transform: translateZ(58px) rotateY(16deg); }
-  .workflow3d-card.detect { right: 0; top: 15%; transform: translateZ(132px) rotateY(-18deg); }
-  .workflow3d-card.timeline { left: 12%; bottom: 4%; transform: translateZ(92px) rotateX(-8deg) rotateY(12deg); }
-  .workflow3d-card.export { right: 8%; bottom: 1%; transform: translateZ(42px) rotateX(-10deg) rotateY(-12deg); }
+  .workflow3d-card.input {
+    left: 0;
+    top: 7%;
+    transform: translate(calc(var(--scene-spread) * -1px), calc(var(--scene-spread) * -.22px)) translateZ(calc(58px + var(--scene-depth) * 1px)) rotateY(16deg);
+  }
+  .workflow3d-card.detect {
+    right: -1%;
+    top: 7%;
+    transform: translate(calc(var(--scene-spread) * 1px), calc(var(--scene-spread) * -.35px)) translateZ(calc(132px + var(--scene-depth) * 1.25px)) rotateY(-18deg);
+  }
+  .workflow3d-card.timeline {
+    left: 3%;
+    bottom: 8%;
+    transform: translate(calc(var(--scene-spread) * -.7px), calc(var(--scene-spread) * .22px)) translateZ(calc(92px + var(--scene-depth) * .9px)) rotateX(-8deg) rotateY(12deg);
+  }
+  .workflow3d-card.export {
+    right: 2%;
+    bottom: 9%;
+    transform: translate(calc(var(--scene-spread) * .8px), calc(var(--scene-spread) * .25px)) translateZ(calc(42px + var(--scene-depth) * .75px)) rotateX(-10deg) rotateY(-12deg);
+  }
+  .workflow3d-card.is-focused {
+    z-index: 5;
+    border-color: rgba(25,195,238,.42);
+    box-shadow: 0 36px 90px -42px rgba(25,195,238,.62), inset 0 1px 0 rgba(255,255,255,.12);
+  }
+  .workflow3d-controls {
+    position: absolute;
+    z-index: 8;
+    left: 50%;
+    bottom: 14px;
+    width: min(520px, calc(100% - 28px));
+    transform: translateX(-50%);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+    align-items: center;
+    padding: 12px;
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 18px;
+    background: rgba(7,10,21,.68);
+    box-shadow: 0 24px 70px -48px rgba(25,195,238,.66);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+  .workflow3d-range {
+    display: grid;
+    gap: 8px;
+    color: #e9edf7;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .workflow3d-range input {
+    width: 100%;
+    accent-color: var(--accent);
+    cursor: pointer;
+  }
+  .workflow3d-gyro {
+    display: none;
+    min-height: 42px;
+    border: 1px solid rgba(25,195,238,.32);
+    border-radius: 999px;
+    background: linear-gradient(100deg, rgba(25,195,238,.16), rgba(108,76,240,.18));
+    color: #fff;
+    padding: 10px 14px;
+    font-weight: 800;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .workflow3d-gyro.active {
+    background: linear-gradient(100deg, rgba(110,231,200,.82), rgba(25,195,238,.86));
+    color: #031019;
+  }
+  .workflow3d-gyro-status {
+    grid-column: 1 / -1;
+    color: var(--hero2-text-dim);
+    font-size: 12px;
+    line-height: 1.35;
+  }
   .workflow3d-marker {
     position: absolute;
     left: var(--x);
@@ -1143,14 +1224,21 @@
   @media (max-width: 620px) {
     .experience3d { padding: 72px 0 80px; }
     .workflow3d {
-      min-height: 620px;
+      --scene-spread: 14;
+      min-height: 690px;
       perspective: 900px;
       overflow: hidden;
       width: 100%;
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: radial-gradient(circle at 50% 42%, rgba(25,195,238,.08), transparent 54%);
     }
     .workflow3d-stage {
-      inset: 8px 0;
-      transform: rotateX(52deg) rotateZ(-6deg) scale(.74);
+      inset: 8px 0 86px;
+      transform:
+        rotateX(calc(52deg + var(--gyro-y)))
+        rotateZ(calc(-6deg + var(--gyro-x)))
+        scale(.74);
       transform-origin: 50% 50%;
     }
     .workflow3d-core { width: 132px; height: 132px; font-size: 34px; border-radius: 28px; }
@@ -1160,14 +1248,30 @@
       opacity: .72;
     }
     .workflow3d-card {
-      width: min(218px, 66vw);
+      width: min(212px, 62vw);
       min-height: 104px;
-      padding: 14px;
+      padding: 13px;
     }
-    .workflow3d-card.input { left: 3%; top: 0; }
-    .workflow3d-card.detect { right: 7%; top: 20%; }
-    .workflow3d-card.timeline { left: 4%; bottom: 18%; }
-    .workflow3d-card.export { right: 7%; bottom: 0; }
+    .workflow3d-card h3 { font-size: 13.5px; }
+    .workflow3d-card p { font-size: 12px; }
+    .workflow3d-card.input { left: 4%; top: 2%; }
+    .workflow3d-card.detect { right: 3%; top: 18%; }
+    .workflow3d-card.timeline { left: 4%; bottom: 20%; }
+    .workflow3d-card.export { right: 3%; bottom: 4%; }
+    .workflow3d-controls {
+      bottom: 12px;
+      grid-template-columns: 1fr;
+      padding: 11px;
+      width: calc(100% - 20px);
+    }
+    .workflow3d-range {
+      display: none;
+    }
+    .workflow3d-gyro {
+      display: block;
+      width: 100%;
+      min-height: 46px;
+    }
   }
   @media (prefers-reduced-motion: reduce) {
     .workflow3d-stage { transition: none !important; transform: rotateX(54deg) rotateZ(-7deg) !important; }
@@ -1175,6 +1279,7 @@
     .workflow3d-ring::before,
     .workflow3d-marker,
     .workflow3d-card .card-line i { animation: none !important; }
+    .workflow3d-controls { display: none; }
   }
 
 
@@ -2132,6 +2237,21 @@
         <span class="workflow3d-marker" style="--x:78%; --y:64%; --z:178px; --speed:3.5s;"></span>
         <span class="workflow3d-marker" style="--x:34%; --y:74%; --z:86px; --speed:4.1s;"></span>
       </div>
+      <div class="workflow3d-controls" aria-label="Sterowanie sceną 3D">
+        <label class="workflow3d-range">
+          <span data-lang-el="pl">Rozsuń informacje</span>
+          <span data-lang-el="en">Spread the info cards</span>
+          <input data-workflow-spread type="range" min="0" max="72" value="26" aria-label="Rozsuń informacje">
+        </label>
+        <button class="workflow3d-gyro" type="button" data-gyro-enable>
+          <span data-lang-el="pl">Włącz żyroskop</span>
+          <span data-lang-el="en">Enable gyro</span>
+        </button>
+        <div class="workflow3d-gyro-status" data-gyro-status>
+          <span data-lang-el="pl">Telefon: scena reaguje na przechylenie po zgodzie. Desktop: użyj suwaka albo myszy.</span>
+          <span data-lang-el="en">Phone: the scene reacts to tilt after permission. Desktop: use the slider or mouse.</span>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -2843,13 +2963,41 @@
   })();
 
 
-  // ---- 3D workflow section: scroll and pointer depth ----
+  // ---- 3D workflow section: scroll, desktop spread controls, mobile gyro ----
   (function(){
     const scene = document.querySelector('[data-workflow3d]');
     if (!scene) return;
     const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduced) return;
+
+    const spread = scene.querySelector('[data-workflow-spread]');
+    const gyroButton = scene.querySelector('[data-gyro-enable]');
+    const gyroStatus = scene.querySelector('[data-gyro-status]');
+    const cards = Array.from(scene.querySelectorAll('.workflow3d-card'));
     let ticking = false;
+    let gyroEnabled = false;
+
+    function clamp(value, min, max) {
+      return Math.max(min, Math.min(max, value));
+    }
+
+    function activeLang() {
+      return document.documentElement.getAttribute('data-lang') === 'en' ? 'en' : 'pl';
+    }
+
+    function setStatus(pl, en) {
+      if (!gyroStatus) return;
+      const text = activeLang() === 'en' ? en : pl;
+      gyroStatus.textContent = text;
+    }
+
+    function setGyroButton(active) {
+      if (!gyroButton) return;
+      gyroButton.classList.toggle('active', active);
+      gyroButton.textContent = active
+        ? (activeLang() === 'en' ? 'Gyro active' : 'Żyroskop działa')
+        : (activeLang() === 'en' ? 'Enable gyro' : 'Włącz żyroskop');
+    }
 
     function updateScene(){
       const rect = scene.getBoundingClientRect();
@@ -2866,14 +3014,65 @@
       }
     }
 
+    if (spread) {
+      spread.addEventListener('input', () => {
+        const value = Number(spread.value || 0);
+        scene.style.setProperty('--scene-spread', value.toFixed(0));
+        scene.style.setProperty('--scene-depth', (value * .46).toFixed(1));
+      });
+    }
+
+    cards.forEach(card => {
+      card.addEventListener('pointerenter', () => card.classList.add('is-focused'), { passive: true });
+      card.addEventListener('pointerleave', () => card.classList.remove('is-focused'), { passive: true });
+    });
+
     scene.addEventListener('pointermove', (event) => {
+      if (gyroEnabled || event.pointerType === 'touch') return;
       const rect = scene.getBoundingClientRect();
       const x = ((event.clientX - rect.left) / rect.width - .5) * 10;
       scene.style.setProperty('--scene-tilt', x.toFixed(2) + 'deg');
     }, { passive: true });
     scene.addEventListener('pointerleave', () => {
-      scene.style.setProperty('--scene-tilt', '0deg');
+      if (!gyroEnabled) scene.style.setProperty('--scene-tilt', '0deg');
     }, { passive: true });
+
+    function handleOrientation(event) {
+      if (!gyroEnabled) return;
+      const gamma = clamp(event.gamma || 0, -28, 28);
+      const beta = clamp((event.beta || 0) - 45, -24, 24);
+      scene.style.setProperty('--gyro-x', (gamma * .24).toFixed(2) + 'deg');
+      scene.style.setProperty('--gyro-y', (beta * -.16).toFixed(2) + 'deg');
+      scene.style.setProperty('--scene-spread', (24 + Math.abs(gamma) * .72).toFixed(0));
+      scene.style.setProperty('--scene-depth', (Math.abs(beta) * .7).toFixed(1));
+    }
+
+    async function enableGyro() {
+      if (!('DeviceOrientationEvent' in window)) {
+        setStatus('Ten telefon lub przeglądarka nie udostępnia żyroskopu.', 'This phone or browser does not expose gyro data.');
+        return;
+      }
+      try {
+        if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+          const result = await DeviceOrientationEvent.requestPermission();
+          if (result !== 'granted') {
+            setStatus('Brak zgody na czujniki ruchu. Scena dalej działa myszą i suwakiem.', 'Motion permission was not granted. The scene still works with mouse and slider.');
+            return;
+          }
+        }
+        gyroEnabled = true;
+        setGyroButton(true);
+        setStatus('Przechyl telefon, a karty odsuną się i obrócą w przestrzeni.', 'Tilt the phone and the cards will spread and rotate in space.');
+        window.addEventListener('deviceorientation', handleOrientation, { passive: true });
+      } catch (err) {
+        setStatus('Nie udało się uruchomić żyroskopu w tej przeglądarce.', 'Could not enable gyro in this browser.');
+      }
+    }
+
+    if (gyroButton) {
+      gyroButton.addEventListener('click', enableGyro);
+    }
+
     window.addEventListener('scroll', queueUpdate, { passive: true });
     window.addEventListener('resize', queueUpdate);
     updateScene();
