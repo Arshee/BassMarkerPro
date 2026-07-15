@@ -49,13 +49,14 @@
   /* ---------- reveal-on-scroll ---------- */
   .reveal {
     opacity: 0;
-    transform: translateY(28px);
-    transition: opacity .8s var(--ease), transform .8s var(--ease);
-    will-change: opacity, transform;
+    filter: blur(7px);
+    transform: translateY(34px);
+    transition: opacity .85s var(--ease), transform .85s var(--ease), filter .85s var(--ease);
+    will-change: opacity, transform, filter;
   }
-  .reveal.in-view { opacity: 1; transform: translateY(0); }
-  .reveal-scale { opacity: 0; transform: scale(.94); transition: opacity .8s var(--ease), transform .8s var(--ease); }
-  .reveal-scale.in-view { opacity: 1; transform: scale(1); }
+  .reveal.in-view { opacity: 1; filter: blur(0); transform: translateY(0); }
+  .reveal-scale { opacity: 0; filter: blur(7px); transform: translateY(24px) scale(.965); transition: opacity .85s var(--ease), transform .85s var(--ease), filter .85s var(--ease); }
+  .reveal-scale.in-view { opacity: 1; filter: blur(0); transform: translateY(0) scale(1); }
   .stagger > * { transition-delay: calc(var(--i, 0) * 70ms); }
 
   /* ---------- beat-in: marker-pop reveal for "how it works" ---------- */
@@ -531,7 +532,7 @@
 
   @media (prefers-reduced-motion: reduce) {
     .waveform-strip .bar, .hero-glow, .pin-float, .slider-demo .fill, .mode-card .bars span, .eyebrow .dot { animation: none !important; }
-    .reveal, .reveal-scale, .hero-shot-frame { transition: none !important; opacity: 1 !important; transform: none !important; }
+    .reveal, .reveal-scale, .hero-shot-frame { transition: none !important; opacity: 1 !important; filter: none !important; transform: none !important; }
   }
   @media (max-width: 540px) {
     .pricing-card { padding: 36px 24px; }
@@ -2271,8 +2272,8 @@
   }
   .nav2-cta::after, .btn-grad::after { display: none; }
 
-  .hero2 { padding-top: 118px; min-height: 800px; }
-  .hero2-grid { gap: clamp(52px, 6vw, 96px); }
+  .hero2 { padding-top: 58px; min-height: 760px; }
+  .hero2-grid { padding-top: 30px; gap: clamp(52px, 6vw, 96px); }
   .hero2-left { max-width: 610px; }
   .hero2-eyebrow {
     color: #c8c9d0;
@@ -2790,34 +2791,21 @@
       inset 0 -1px 0 rgba(255,255,255,.025),
       0 70px 130px -72px rgba(115,95,255,.5);
     isolation: isolate;
+    scroll-margin-top: 92px;
   }
+  #buy .pricing-card::before,
   #buy .pricing-card::after {
-    content: "";
-    position: absolute;
-    inset: 30px;
-    height: auto;
-    border: 1px solid rgba(255,255,255,.13);
-    border-radius: 50%;
-    background: none;
-    filter: none;
-    transform: none;
-    pointer-events: none;
-    z-index: 0;
+    content: none !important;
+    display: none !important;
   }
-  #buy .pricing-card::before {
-    content: "PRO EDITION";
-    position: absolute;
-    top: 18px; right: 22px;
-    width: auto; height: auto;
-    padding: 7px 10px;
-    border: 1px solid rgba(255,255,255,.12);
-    border-radius: 999px;
-    background: rgba(255,255,255,.035);
+  #buy .pro-edition {
+    position: relative;
+    z-index: 2;
+    margin: -20px auto 28px;
     color: #8d8f99;
     font: 600 9px/1 ui-monospace, "SF Mono", monospace;
-    letter-spacing: .14em;
-    opacity: 1;
-    transform: none;
+    letter-spacing: .18em;
+    text-align: center;
   }
   #buy .price-amount {
     margin: 26px 0 10px;
@@ -2906,15 +2894,37 @@
     letter-spacing: .015em;
   }
 
-  /* Product gallery: one stable editorial composition */
+  /* Product gallery: clean cinematic triptych */
   #gallery .gallery {
-    grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr);
-    grid-template-rows: repeat(2, minmax(230px, 1fr));
-    align-items: stretch;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: none;
+    gap: 18px;
+    align-items: start;
+    perspective: none;
   }
-  #gallery .gallery-main { grid-row: 1 / span 2; }
-  #gallery .gallery-item { min-width: 0; min-height: 0; }
-  #gallery .gallery-item img { object-position: center; }
+  #gallery .gallery-item,
+  #gallery .gallery-item:nth-child(n) {
+    min-width: 0;
+    min-height: 0;
+    aspect-ratio: 4 / 5;
+    border-radius: 24px;
+    background:
+      radial-gradient(circle at 50% 18%, rgba(124,140,255,.12), transparent 38%),
+      linear-gradient(155deg, #111219, #08090d);
+    transform: none;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.055), 0 32px 70px -52px rgba(0,0,0,.95);
+  }
+  #gallery .gallery-item img {
+    width: 100%;
+    height: 100%;
+    padding: 18px 14px 54px;
+    object-fit: contain;
+    object-position: center;
+    transition: transform .45s var(--ease), filter .45s ease;
+  }
+  #gallery .gallery-item:hover { transform: translateY(-6px); border-color: rgba(152,156,255,.26); }
+  #gallery .gallery-item:hover img { transform: scale(1.025); filter: brightness(1.06); }
+  #gallery .gallery-item .tag { left: 16px; right: 16px; bottom: 14px; width: fit-content; max-width: calc(100% - 32px); }
 
   /* Reserved video showcase */
   .demo-video {
@@ -2939,10 +2949,15 @@
     #modes .mode-card-anim.in-view:hover { transform: translateY(-5px); }
     #requirements .feature-row { padding: 22px; }
     #buy .pricing-card { padding: 48px 24px 34px; }
-    #buy .pricing-card::after { inset: 22px 12px; }
-    #gallery .gallery { grid-template-columns:1fr; grid-template-rows:auto; }
-    #gallery .gallery-main { grid-row:auto; }
-    #gallery .gallery-item { min-height:280px; }
+    #gallery .gallery {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: auto;
+      gap: 14px;
+    }
+    #gallery .gallery-item,
+    #gallery .gallery-item:nth-child(n) { min-height: 0; aspect-ratio: 5 / 6; border-radius: 20px; }
+    #gallery .gallery-item img { padding: 14px 10px 50px; }
     .demo-video, .demo-video img { min-height:340px; }
   }
   @media (prefers-reduced-motion: reduce) {
@@ -2992,7 +3007,8 @@
       font-size: 12px;
     }
 
-    .hero2 { padding-top: 104px; }
+    .hero2 { padding-top: 72px; }
+    .hero2-grid { padding-top: 26px; }
     .hero2-grid { gap: 42px; }
     .hero2-title { font-size: clamp(44px, 13.2vw, 58px); }
     .hero2-sub { font-size: 16px; line-height: 1.6; }
@@ -3024,7 +3040,6 @@
     #requirements .feature-visual { border-radius: 18px; }
 
     #buy .pricing-card { width: 100%; max-width: 100%; border-radius: 24px; }
-    #buy .pricing-card::before { top: 14px; right: 14px; }
     #buy .price-main { font-size: 46px; }
     #buy .price-value-row { gap: 13px; }
     #buy .price-old { font-size: 25px; }
@@ -3229,8 +3244,6 @@
       <div class="hero2-ctas" data-sales-step style="--sales-delay:560ms">
         <a href="#buy" class="btn-grad" data-lang-el="pl">Kup BassMarker Pro →</a>
         <a href="#buy" class="btn-grad" data-lang-el="en">Get BassMarker Pro →</a>
-        <a href="#how" class="btn-outline2" data-lang-el="pl">Zobacz demo</a>
-        <a href="#how" class="btn-outline2" data-lang-el="en">Watch Demo</a>
       </div>
 
       <div class="hero2-social" data-sales-step style="--sales-delay:680ms">
@@ -3504,15 +3517,15 @@
     </div>
 
     <div class="gallery reveal stagger">
-      <div class="gallery-item gallery-main" style="--i:0;">
-        <img src="product-bassmarker.png" alt="BassMarker Pro application interface with audio import, detection settings and Final Cut Pro marker controls" width="1360" height="1680" loading="lazy" decoding="async">
-        <span class="tag" data-lang-el="pl">Pełny interfejs BassMarker Pro</span>
-        <span class="tag" data-lang-el="en">The complete BassMarker Pro interface</span>
+      <div class="gallery-item" style="--i:0;">
+        <img src="gallery-bassmarker-result.png" alt="BassMarker Pro showing completed analysis, 91 BPM and 38 markers added to Final Cut Pro" width="1386" height="1692" loading="lazy" decoding="async">
+        <span class="tag" data-lang-el="pl">Analiza zakończona · 38 markerów</span>
+        <span class="tag" data-lang-el="en">Analysis complete · 38 markers</span>
       </div>
       <div class="gallery-item" style="--i:1">
-        <img src="detail-timeline.png" alt="BassMarker Pro window beside a Final Cut Pro timeline with beat markers" width="661" height="557" loading="lazy" decoding="async">
-        <span class="tag" data-lang-el="pl">Markery bezpośrednio na timeline</span>
-        <span class="tag" data-lang-el="en">Markers directly on the timeline</span>
+        <img src="gallery-fcp-markers.png" alt="Real Final Cut Pro project with beat markers placed across the audio timeline" width="3016" height="1860" loading="lazy" decoding="async">
+        <span class="tag" data-lang-el="pl">Prawdziwy timeline Final Cut Pro</span>
+        <span class="tag" data-lang-el="en">A real Final Cut Pro timeline</span>
       </div>
       <div class="gallery-item" style="--i:2;">
         <img src="screen-app.png" alt="BassMarker Pro controls for beat type, project frame rate and timing advance" width="1496" height="1816" loading="lazy" decoding="async">
@@ -3565,6 +3578,7 @@
     </div>
 
     <div class="pricing-card reveal-scale">
+      <div class="pro-edition">PRO EDITION</div>
       <div class="kicker" style="margin-bottom:0;" data-lang-el="pl">Pełny dostęp · BassMarker Pro</div>
       <div class="kicker" style="margin-bottom:0;" data-lang-el="en">Full access · BassMarker Pro</div>
       <div class="price-amount">
@@ -3712,6 +3726,18 @@
   });
   setLang('pl');
 
+  // ---- keep purchase CTAs focused on the offer card ----
+  document.querySelectorAll('a[href="#buy"]').forEach(link => {
+    link.addEventListener('click', event => {
+      const card = document.querySelector('#buy .pricing-card');
+      if (!card) return;
+      event.preventDefault();
+      const compact = window.matchMedia('(max-width: 760px)').matches;
+      card.scrollIntoView({ behavior: 'smooth', block: compact ? 'start' : 'center' });
+      if (history.replaceState) history.replaceState(null, '', '#buy');
+    });
+  });
+
   // ---- waveform signature bars (legacy strip, only if present) ----
   const waveEl = document.getElementById('wave');
   if (waveEl) {
@@ -3815,7 +3841,9 @@
   // is already in the initial viewport before observation starts.
   revealIfVisible();
   window.addEventListener('load', revealIfVisible);
-  setTimeout(()=> revealEls.forEach(el=> el.classList.add('in-view')), 4000);
+  // Re-check only elements that are actually visible; do not reveal the
+  // entire page on a timer, otherwise lower sections lose their scroll fade.
+  setTimeout(revealIfVisible, 1200);
 
   // ---- "How it works" beat-paced sequential reveal ----
   // Elements pop in one by one, like markers landing on the beat,
