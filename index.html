@@ -198,21 +198,34 @@
     transition: background .2s ease, color .2s ease;
   }
   .lang-switch button.active { background: var(--text); color: #000; }
-  .lang-switch select {
-    min-width: 62px;
-    min-height: 32px;
-    padding: 5px 24px 5px 10px;
-    border: 0;
-    border-radius: 999px;
-    background: #fff;
-    color: #08080a;
-    font: 700 11px/1 var(--font, system-ui, sans-serif);
-    cursor: pointer;
-    appearance: auto;
+  .locale-picker { position: relative; }
+  .locale-trigger {
+    min-width: 64px; min-height: 34px; display:inline-flex; align-items:center; justify-content:center; gap:7px;
+    padding: 6px 11px; border: 1px solid rgba(255,255,255,.12); border-radius: 999px;
+    background: rgba(255,255,255,.055); color:#f4f4f6; font:700 11px/1 system-ui,sans-serif;
+    letter-spacing:.04em; cursor:pointer; transition:background .2s ease,border-color .2s ease;
   }
+  .locale-trigger:hover, .locale-trigger[aria-expanded="true"] { background:rgba(255,255,255,.1); border-color:rgba(255,255,255,.22); }
+  .locale-trigger__chevron { width:6px; height:6px; border-right:1.5px solid currentColor; border-bottom:1.5px solid currentColor; transform:rotate(45deg) translateY(-2px); opacity:.65; }
+  .locale-menu {
+    position:absolute; top:calc(100% + 10px); right:0; z-index:300; width:190px; padding:7px;
+    border:1px solid rgba(255,255,255,.12); border-radius:16px; background:rgba(10,11,16,.96);
+    box-shadow:0 24px 60px -24px rgba(0,0,0,.95); backdrop-filter:blur(24px); opacity:0;
+    visibility:hidden; transform:translateY(-7px) scale(.98); transform-origin:top right;
+    transition:opacity .18s ease,transform .18s ease,visibility .18s;
+  }
+  .locale-picker.is-open .locale-menu { opacity:1; visibility:visible; transform:none; }
+  .locale-option { width:100%; min-height:38px; display:flex; align-items:center; gap:10px; padding:8px 10px; border:0; border-radius:10px; background:transparent; color:#c6c7cf; cursor:pointer; text-align:left; font:500 12px/1.2 system-ui,sans-serif; }
+  .locale-option:hover { background:rgba(255,255,255,.07); color:#fff; }
+  .locale-option.is-active { background:rgba(152,156,255,.12); color:#fff; }
+  .locale-option b { width:27px; color:#989cff; font-size:10px; letter-spacing:.08em; }
   #google_translate_element { position: fixed; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
-  .goog-te-banner-frame { display: none !important; }
-  body { top: 0 !important; }
+  .goog-te-banner-frame,
+  iframe.goog-te-banner-frame,
+  .VIpgJd-ZVi9od-ORHb-OEVmcd,
+  .VIpgJd-ZVi9od-aZ2wEe-wOHMyf { display: none !important; visibility:hidden !important; height:0 !important; }
+  html { margin-top:0 !important; }
+  body { top: 0 !important; position:static !important; }
 
   .nav-cta {
     background: var(--text); color: #000; font-size: 13px; font-weight: 600;
@@ -3202,16 +3215,19 @@
     <div class="nav-right">
       <div class="nav2-badge">🎬 <span data-lang-el="pl">Dla Final Cut Pro</span><span data-lang-el="en">For Final Cut Pro</span></div>
       <div class="lang-switch" role="group" aria-label="Language">
-        <select id="localeSelect" aria-label="Wybierz język">
-          <option value="pl">PL</option>
-          <option value="en">EN</option>
-          <option value="de">DE</option>
-          <option value="ja">日本語</option>
-          <option value="ru">RU</option>
-          <option value="es">ES</option>
-          <option value="fr">FR</option>
-          <option value="pt">PT</option>
-        </select>
+        <div class="locale-picker" id="localePicker">
+          <button type="button" class="locale-trigger" id="localeTrigger" aria-haspopup="listbox" aria-expanded="false"><span id="localeCurrent">PL</span><span class="locale-trigger__chevron"></span></button>
+          <div class="locale-menu" id="localeMenu" role="listbox">
+            <button type="button" class="locale-option" data-locale="pl"><b>PL</b> Polski</button>
+            <button type="button" class="locale-option" data-locale="en"><b>EN</b> English</button>
+            <button type="button" class="locale-option" data-locale="de"><b>DE</b> Deutsch</button>
+            <button type="button" class="locale-option" data-locale="ja"><b>JA</b> 日本語</button>
+            <button type="button" class="locale-option" data-locale="ru"><b>RU</b> Русский</button>
+            <button type="button" class="locale-option" data-locale="es"><b>ES</b> Español</button>
+            <button type="button" class="locale-option" data-locale="fr"><b>FR</b> Français</button>
+            <button type="button" class="locale-option" data-locale="pt"><b>PT</b> Português</button>
+          </div>
+        </div>
       </div>
       <a href="#buy" class="nav2-cta" data-lang-el="pl">Kup teraz →</a>
       <a href="#buy" class="nav2-cta" data-lang-el="en">Get Pro →</a>
@@ -3748,7 +3764,10 @@
     btn.addEventListener('click', ()=> setLang(btn.dataset.setLang));
   });
   const supportedLocales = ['pl','en','de','ja','ru','es','fr','pt'];
-  const localeSelect = document.getElementById('localeSelect');
+  const localePicker = document.getElementById('localePicker');
+  const localeTrigger = document.getElementById('localeTrigger');
+  const localeCurrent = document.getElementById('localeCurrent');
+  const localeOptions = document.querySelectorAll('.locale-option');
   const savedLocale = localStorage.getItem('bassmarker-locale');
   const browserLocale = (navigator.languages && navigator.languages[0] || navigator.language || 'en').toLowerCase().split('-')[0];
   const initialLocale = supportedLocales.includes(savedLocale) ? savedLocale : (supportedLocales.includes(browserLocale) ? browserLocale : 'en');
@@ -3770,7 +3789,10 @@
   function selectLocale(locale, reloadForNative){
     if (!supportedLocales.includes(locale)) locale = 'en';
     localStorage.setItem('bassmarker-locale', locale);
-    if (localeSelect) localeSelect.value = locale;
+    if (localeCurrent) localeCurrent.textContent = locale.toUpperCase();
+    localeOptions.forEach(option => option.classList.toggle('is-active', option.dataset.locale === locale));
+    if (localePicker) localePicker.classList.remove('is-open');
+    if (localeTrigger) localeTrigger.setAttribute('aria-expanded', 'false');
     if (locale === 'pl' || locale === 'en') {
       if (reloadForNative && document.documentElement.classList.contains('translated-ltr')) {
         clearGoogleTranslation();
@@ -3783,8 +3805,37 @@
     }
   }
 
-  if (localeSelect) localeSelect.addEventListener('change', event => selectLocale(event.target.value, true));
+  if (localeTrigger) localeTrigger.addEventListener('click', () => {
+    const willOpen = !localePicker.classList.contains('is-open');
+    localePicker.classList.toggle('is-open', willOpen);
+    localeTrigger.setAttribute('aria-expanded', String(willOpen));
+  });
+  localeOptions.forEach(option => option.addEventListener('click', () => selectLocale(option.dataset.locale, true)));
+  document.addEventListener('click', event => {
+    if (localePicker && !localePicker.contains(event.target)) {
+      localePicker.classList.remove('is-open');
+      localeTrigger.setAttribute('aria-expanded', 'false');
+    }
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && localePicker) {
+      localePicker.classList.remove('is-open');
+      localeTrigger.setAttribute('aria-expanded', 'false');
+      localeTrigger.focus();
+    }
+  });
   selectLocale(initialLocale, false);
+
+  function suppressTranslateChrome(){
+    if (document.documentElement.style.getPropertyValue('margin-top') !== '0px') document.documentElement.style.setProperty('margin-top', '0px', 'important');
+    if (document.body.style.getPropertyValue('top') !== '0px') document.body.style.setProperty('top', '0px', 'important');
+    document.querySelectorAll('.goog-te-banner-frame, iframe.goog-te-banner-frame, .VIpgJd-ZVi9od-ORHb-OEVmcd').forEach(el => {
+      if (el.style.getPropertyValue('display') !== 'none') el.style.setProperty('display', 'none', 'important');
+      if (el.getAttribute('aria-hidden') !== 'true') el.setAttribute('aria-hidden', 'true');
+    });
+  }
+  new MutationObserver(suppressTranslateChrome).observe(document.documentElement, { childList:true, subtree:true, attributes:true, attributeFilter:['style','class'] });
+  suppressTranslateChrome();
 
   window.googleTranslateElementInit = function(){
     new google.translate.TranslateElement({
@@ -3792,6 +3843,7 @@
       includedLanguages: 'de,es,fr,ja,pt,ru',
       autoDisplay: false
     }, 'google_translate_element');
+    suppressTranslateChrome();
     if (!['pl','en'].includes(initialLocale)) window.setTimeout(() => applyMachineLocale(initialLocale), 250);
   };
 
