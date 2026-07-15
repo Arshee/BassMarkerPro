@@ -198,6 +198,21 @@
     transition: background .2s ease, color .2s ease;
   }
   .lang-switch button.active { background: var(--text); color: #000; }
+  .lang-switch select {
+    min-width: 62px;
+    min-height: 32px;
+    padding: 5px 24px 5px 10px;
+    border: 0;
+    border-radius: 999px;
+    background: #fff;
+    color: #08080a;
+    font: 700 11px/1 var(--font, system-ui, sans-serif);
+    cursor: pointer;
+    appearance: auto;
+  }
+  #google_translate_element { position: fixed; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .goog-te-banner-frame { display: none !important; }
+  body { top: 0 !important; }
 
   .nav-cta {
     background: var(--text); color: #000; font-size: 13px; font-weight: 600;
@@ -3187,8 +3202,16 @@
     <div class="nav-right">
       <div class="nav2-badge">🎬 <span data-lang-el="pl">Dla Final Cut Pro</span><span data-lang-el="en">For Final Cut Pro</span></div>
       <div class="lang-switch" role="group" aria-label="Language">
-        <button type="button" data-set-lang="pl" class="active">PL</button>
-        <button type="button" data-set-lang="en">EN</button>
+        <select id="localeSelect" aria-label="Wybierz język">
+          <option value="pl">PL</option>
+          <option value="en">EN</option>
+          <option value="de">DE</option>
+          <option value="ja">日本語</option>
+          <option value="ru">RU</option>
+          <option value="es">ES</option>
+          <option value="fr">FR</option>
+          <option value="pt">PT</option>
+        </select>
       </div>
       <a href="#buy" class="nav2-cta" data-lang-el="pl">Kup teraz →</a>
       <a href="#buy" class="nav2-cta" data-lang-el="en">Get Pro →</a>
@@ -3724,7 +3747,53 @@
   document.querySelectorAll('[data-set-lang]').forEach(btn=>{
     btn.addEventListener('click', ()=> setLang(btn.dataset.setLang));
   });
-  setLang('pl');
+  const supportedLocales = ['pl','en','de','ja','ru','es','fr','pt'];
+  const localeSelect = document.getElementById('localeSelect');
+  const savedLocale = localStorage.getItem('bassmarker-locale');
+  const browserLocale = (navigator.languages && navigator.languages[0] || navigator.language || 'en').toLowerCase().split('-')[0];
+  const initialLocale = supportedLocales.includes(savedLocale) ? savedLocale : (supportedLocales.includes(browserLocale) ? browserLocale : 'en');
+
+  function clearGoogleTranslation(){
+    document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
+  }
+
+  function applyMachineLocale(locale){
+    setLang('en');
+    document.documentElement.lang = locale;
+    const combo = document.querySelector('.goog-te-combo');
+    if (!combo) return false;
+    combo.value = locale;
+    combo.dispatchEvent(new Event('change'));
+    return true;
+  }
+
+  function selectLocale(locale, reloadForNative){
+    if (!supportedLocales.includes(locale)) locale = 'en';
+    localStorage.setItem('bassmarker-locale', locale);
+    if (localeSelect) localeSelect.value = locale;
+    if (locale === 'pl' || locale === 'en') {
+      if (reloadForNative && document.documentElement.classList.contains('translated-ltr')) {
+        clearGoogleTranslation();
+        location.reload();
+        return;
+      }
+      setLang(locale);
+    } else {
+      if (!applyMachineLocale(locale)) window.setTimeout(() => applyMachineLocale(locale), 700);
+    }
+  }
+
+  if (localeSelect) localeSelect.addEventListener('change', event => selectLocale(event.target.value, true));
+  selectLocale(initialLocale, false);
+
+  window.googleTranslateElementInit = function(){
+    new google.translate.TranslateElement({
+      pageLanguage: 'en',
+      includedLanguages: 'de,es,fr,ja,pt,ru',
+      autoDisplay: false
+    }, 'google_translate_element');
+    if (!['pl','en'].includes(initialLocale)) window.setTimeout(() => applyMachineLocale(initialLocale), 250);
+  };
 
   // ---- keep purchase CTAs focused on the offer card ----
   document.querySelectorAll('a[href="#buy"]').forEach(link => {
@@ -4668,5 +4737,7 @@
   })();
 </script>
 
+<div id="google_translate_element" aria-hidden="true"></div>
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async></script>
 </body>
 </html>
